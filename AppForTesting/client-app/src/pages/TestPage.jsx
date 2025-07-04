@@ -26,7 +26,7 @@ export default function TestPage() {
                 const processedQuestions = data.map((q, index) => ({
                     ...q,
                     // Если у вопроса нет ID, используем индекс + 1000
-                    Id: q.Id || index + 1000
+                    Id: q.id || index + 1000
                 }));
 
                 setQuestions(processedQuestions);
@@ -54,9 +54,12 @@ export default function TestPage() {
         return () => clearInterval(timerId);
     }, []);
 
-    const handleAnswerSelect = (questionId, answerId) => {
-        setAnswers(prev => ({ ...prev, [questionId]: answerId }));
-    };
+   const handleAnswerSelect = (questionId, answerId) => {
+  setAnswers(prev => ({
+    ...prev,
+    [questionId]: Number(answerId) // Приводим к числу
+  }));
+};
 
     const handleSubmit = async () => {
         try {
@@ -78,15 +81,15 @@ export default function TestPage() {
                 correctAnswers: result.correctAnswers,
                 totalQuestions: result.totalQuestions,
                 incorrectAnswers: result.incorrectAnswers.map(item => ({
-                    Question: item.Question,
-                    SelectedAnswerId: item.SelectedAnswerId,
-                    SelectedAnswerText: item.Question.Options.find(
-                        o => o.Id === item.SelectedAnswerId
-                    )?.Text || "Нет ответа",
-                    CorrectAnswerText: item.Question.Options.find(
-                        o => o.Id === item.Question.CorrectAnswerId
-                    )?.Text || "Неизвестно",
-                    Explanation: item.Question.Explanation
+                    Question: item.question,
+                    SelectedAnswerId: item.selectedAnswerId,
+                    SelectedAnswerText: item.question.options.find(
+                        o => o.id === item.selectedAnswerId
+                    )?.text || "Нет ответа",
+                    CorrectAnswerText: item.question.options.find(
+                        o => o.Id === item.question.correctAnswerId
+                    )?.text || "Неизвестно",
+                    Explanation: item.question.explanation
                 }))
             });
 
@@ -107,10 +110,10 @@ export default function TestPage() {
             {questions.length > 0 ? (
                 questions.map(question => (
                     <QuestionCard
-                        key={`question_${question.Id}`}
+                        key={`question_${question.id}`}
                         question={question}
                         onSelect={handleAnswerSelect}
-                        selectedAnswer={answers[question.Id]}
+                        selectedAnswer={answers[question.id]}
                     />
                 ))
             ) : (

@@ -12,7 +12,7 @@ const AnswerOption = ({
                 type="radio"
                 id={`q_${questionId}_o_${option.id}`}
                 name={`question_${questionId}`}
-                checked={selectedAnswer === option.id}
+                checked={Number(selectedAnswer) === Number(option.id)}
                 onChange={() => onSelect(questionId, option.id)}
             />
             <label htmlFor={`q_${questionId}_o_${option.id}`}>
