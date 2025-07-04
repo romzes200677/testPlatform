@@ -85,6 +85,7 @@ graph TD
 | Duration      | INT         | Время на прохождение (минуты) |
 _______________________________________________________________
 
+```mermaid
 erDiagram
     TOPICS ||--o{ QUESTIONS : contains
     QUESTIONS ||--o{ ANSWER_OPTIONS : has
@@ -119,9 +120,10 @@ erDiagram
         int TopicId FK
         int Duration
     }
+```
 
-Взаимосвязи таблиц
-
+###Взаимосвязи таблиц
+```mermaid
 erDiagram
     TOPICS ||--o{ QUESTIONS : "1 тема → N вопросов"
     QUESTIONS ||--o{ ANSWER_OPTIONS : "1 вопрос → N вариантов"
@@ -154,5 +156,5 @@ erDiagram
         int Duration
         int QuestionCount
     }
-
+```
 
