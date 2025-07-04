@@ -1,0 +1,6 @@
+@CSharpTestApp_HostAddress = http://localhost:5231
+
+GET {{CSharpTestApp_HostAddress}}/api/test/questions
+Accept: application/json
+
+###
