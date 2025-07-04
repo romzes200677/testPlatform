@@ -20,7 +20,7 @@
 - 🏆 **Система достижений и рейтингов**
 
 ## Техническая архитектура
-
+```mermaid
 graph TD
     A[Frontend - React] --> B[Backend - ASP.NET Core]
     B --> C[Database - PostgreSQL]
@@ -28,6 +28,7 @@ graph TD
     C --> E[Tests]
     C --> F[Results]
     C --> G[Users]
+    ```
     
 ### Основные компоненты системы
 
@@ -85,6 +86,7 @@ graph TD
 | Duration      | INT         | Время на прохождение (минуты) |
 _______________________________________________________________
 
+```mermaid
 erDiagram
     TOPICS ||--o{ QUESTIONS : contains
     QUESTIONS ||--o{ ANSWER_OPTIONS : has
@@ -119,9 +121,10 @@ erDiagram
         int TopicId FK
         int Duration
     }
+```
 
-Взаимосвязи таблиц
-
+###Взаимосвязи таблиц
+```mermaid
 erDiagram
     TOPICS ||--o{ QUESTIONS : "1 тема → N вопросов"
     QUESTIONS ||--o{ ANSWER_OPTIONS : "1 вопрос → N вариантов"
@@ -154,5 +157,5 @@ erDiagram
         int Duration
         int QuestionCount
     }
-
+```
 
