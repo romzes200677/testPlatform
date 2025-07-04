@@ -29,7 +29,7 @@ export default function ResultsPage() {
 
     // Группируем ошибки по темам
     const topicsStats = incorrectAnswers.reduce((acc, item) => {
-        const topic = item.Question?.Topic || "Без темы";
+        const topic = item.Question?.topic || "Без темы";
         acc[topic] = (acc[topic] || 0) + 1;
         return acc;
     }, {});
@@ -60,21 +60,21 @@ export default function ResultsPage() {
                     {incorrectAnswers.map((item, index) => {
                         const question = item.Question || {};
                         const selectedAnswerId = item.SelectedAnswerId;
-                        const correctAnswerId = question.CorrectAnswerId;
+                        const correctAnswerId = question.correctAnswerId;
 
                         // Находим тексты ответов
-                        const selectedAnswerText = question.Options?.find(
-                            o => o.Id === selectedAnswerId
-                        )?.Text || "Нет ответа";
+                        const selectedAnswerText = question.options?.find(
+                            o => o.id === selectedAnswerId
+                        )?.text || "Нет ответа";
 
-                        const correctAnswerText = question.Options?.find(
-                            o => o.Id === correctAnswerId
-                        )?.Text || "Неизвестно";
+                        const correctAnswerText = question.options?.find(
+                            o => o.id === correctAnswerId
+                        )?.text || "Неизвестно";
 
                         return (
-                            <div key={`mistake_${question.Id || index}`} className="mistake-card"> {/* Исправлено: добавлен ключ */}
+                            <div key={`mistake_${question.id || index}`} className="mistake-card"> {/* Исправлено: добавлен ключ */}
                                 <div className="question-header">
-                                    <span className="topic-badge">{question.Topic || "Без темы"}</span>
+                                    <span className="topic-badge">{question.topic || "Без темы"}</span>
                                     <h4>{question.Text || "Вопрос не найден"}</h4>
                                 </div>
 
@@ -94,7 +94,7 @@ export default function ResultsPage() {
 
                                 {question.Explanation && (
                                     <div className="explanation">
-                                        <p>{question.Explanation}</p>
+                                        <p>{question.explanation}</p>
                                     </div>
                                 )}
                             </div>

@@ -81,7 +81,7 @@ export default function TestPage() {
                 correctAnswers: result.correctAnswers,
                 totalQuestions: result.totalQuestions,
                 incorrectAnswers: result.incorrectAnswers.map(item => ({
-                    Question: item.question,
+                    Question: item.text,
                     SelectedAnswerId: item.selectedAnswerId,
                     SelectedAnswerText: item.question.options.find(
                         o => o.id === item.selectedAnswerId
