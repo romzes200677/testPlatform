@@ -77,21 +77,25 @@ export default function TestPage() {
             }
 
             // Обрабатываем результат
-            setTestResult({
-                correctAnswers: result.correctAnswers,
-                totalQuestions: result.totalQuestions,
-                incorrectAnswers: result.incorrectAnswers.map(item => ({
-                    Question: item.text,
-                    SelectedAnswerId: item.selectedAnswerId,
-                    SelectedAnswerText: item.question.options.find(
-                        o => o.id === item.selectedAnswerId
-                    )?.text || "Нет ответа",
-                    CorrectAnswerText: item.question.options.find(
-                        o => o.Id === item.question.correctAnswerId
-                    )?.text || "Неизвестно",
-                    Explanation: item.question.explanation
-                }))
-            });
+                    setTestResult({
+            correctAnswers: result.correctAnswers,
+            totalQuestions: result.totalQuestions,
+            incorrectAnswers: result.incorrectAnswers.map(item => ({
+                // Сохраняем ВЕСЬ объект вопроса, а не только текст
+                Question: {
+                    id: item.question.id,
+                    text: item.question.text,
+                    topic: item.question.topic,
+                    options: item.question.options,
+                    correctAnswerId: item.question.correctAnswerId,
+                    explanation: item.question.explanation
+                },
+                SelectedAnswerId: item.selectedAnswerId,
+                // Эти поля можно удалить, они будут вычисляться в ResultsPage
+                // SelectedAnswerText: ...,
+                // CorrectAnswerText: ...,
+            }))
+        });
 
             navigate('/results');
         } catch (error) {

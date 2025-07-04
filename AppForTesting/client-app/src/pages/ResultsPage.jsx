@@ -5,7 +5,6 @@ export default function ResultsPage() {
     const { testResult } = useTestContext();
     const navigate = useNavigate();
 
-    // Если результаты еще не загружены
     if (!testResult) {
         return (
             <div className="loading">
@@ -15,19 +14,16 @@ export default function ResultsPage() {
         );
     }
 
-    // Деструктурируем результат для удобства
     const {
         correctAnswers,
         totalQuestions,
         incorrectAnswers = []
     } = testResult;
 
-    // Рассчитываем процент правильных ответов
     const percentage = totalQuestions > 0
         ? Math.round((correctAnswers / totalQuestions) * 100)
         : 0;
 
-    // Группируем ошибки по темам
     const topicsStats = incorrectAnswers.reduce((acc, item) => {
         const topic = item.Question?.topic || "Без темы";
         acc[topic] = (acc[topic] || 0) + 1;
@@ -49,7 +45,7 @@ export default function ResultsPage() {
                     <h2>Ошибки по темам</h2>
                     <div className="topics-stats">
                         {Object.entries(topicsStats).map(([topic, count]) => (
-                            <div key={`topic_${topic}`} className="topic-item"> {/* Исправлено: добавлен ключ */}
+                            <div key={`topic_${topic}`} className="topic-item">
                                 <span className="topic-name">{topic}</span>
                                 <span className="topic-errors">{count} ошибок</span>
                             </div>
@@ -60,22 +56,24 @@ export default function ResultsPage() {
                     {incorrectAnswers.map((item, index) => {
                         const question = item.Question || {};
                         const selectedAnswerId = item.SelectedAnswerId;
+                        
+                        // ВАЖНОЕ ИСПРАВЛЕНИЕ: используем question.correctAnswerId вместо correctAnswerId
                         const correctAnswerId = question.correctAnswerId;
-
-                        // Находим тексты ответов
+                        
+                        // Вычисляем тексты ответов
                         const selectedAnswerText = question.options?.find(
                             o => o.id === selectedAnswerId
                         )?.text || "Нет ответа";
-
+                        
                         const correctAnswerText = question.options?.find(
-                            o => o.id === correctAnswerId
+                            o => o.id === correctAnswerId  // Исправлено: используем question.correctAnswerId
                         )?.text || "Неизвестно";
 
                         return (
-                            <div key={`mistake_${question.id || index}`} className="mistake-card"> {/* Исправлено: добавлен ключ */}
+                            <div key={`mistake_${question.id || index}`} className="mistake-card">
                                 <div className="question-header">
                                     <span className="topic-badge">{question.topic || "Без темы"}</span>
-                                    <h4>{question.Text || "Вопрос не найден"}</h4>
+                                    <h4>{question.text || "Вопрос не найден"}</h4>
                                 </div>
 
                                 <div className="user-answer">
@@ -92,7 +90,8 @@ export default function ResultsPage() {
                                     </div>
                                 )}
 
-                                {question.Explanation && (
+                                {/* ИСПРАВЛЕНИЕ: используем question.explanation вместо question.Explanation */}
+                                {question.explanation && (
                                     <div className="explanation">
                                         <p>{question.explanation}</p>
                                     </div>
