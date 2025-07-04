@@ -8,7 +8,7 @@ import QuestionCard from '../components/QuestionCard';
 export default function TestPage() {
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState({});
-    const [timeLeft, setTimeLeft] = useState(60 * 60);
+    const [timeLeft, setTimeLeft] = useState(60 * 60 * 2);
     const { setTestResult } = useTestContext();
     const navigate = useNavigate();
 
