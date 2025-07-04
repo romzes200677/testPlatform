@@ -8,22 +8,22 @@ const QuestionCard = ({ question, onSelect, selectedAnswer }) => {
     }
 
     // Получаем опции или используем пустой массив по умолчанию
-    const options = question.Options || [];
+    const options = question.options || [];
 
     return (
         <div className="question-card">
             <div className="question-header">
                 <span className="question-id">Вопрос {question.Id || '?'}</span>
-                <h3>{question.Text || 'Текст вопроса отсутствует'}</h3>
+                <h3>{question.text || 'Текст вопроса отсутствует'}</h3>
             </div>
 
             <div className="options-container">
                 {options.length > 0 ? (
                     options.map(option => (
                         <AnswerOption
-                            key={`option_${question.Id}_${option.Id}`}
+                            key={`option_${question.id}_${option.id}`}
                             option={option}
-                            questionId={question.Id}
+                            questionId={question.id}
                             selectedAnswer={selectedAnswer}
                             onSelect={onSelect}
                         />
