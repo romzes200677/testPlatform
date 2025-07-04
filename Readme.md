@@ -21,7 +21,6 @@
 
 ## Техническая архитектура
 
-```mermaid
 graph TD
     A[Frontend - React] --> B[Backend - ASP.NET Core]
     B --> C[Database - PostgreSQL]
