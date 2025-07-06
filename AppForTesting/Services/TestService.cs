@@ -14,16 +14,25 @@ namespace CSharpTestApp.Services
     {
         Id = 1,
         Topic = "Ввод-вывод данных",
-        Text = "Какой метод используется для вывода текста в консоль с переводом строки?",
+        Text = @"Определи  значение переменной c после выполнения следующего фрагмента программы, не используя среду программирования:
+
+
+```
+        int m = 67; 
+        m = m + 13; 
+        int n = m / 4 - m / 2; 
+        int c = m - n;
+```
+",
         Options = new List<AnswerOption>
         {
-            new AnswerOption { Id = 1, Text = "Console.Read()" },
-            new AnswerOption { Id = 2, Text = "Console.WriteLine()" },
-            new AnswerOption { Id = 3, Text = "Console.Print()" },
-            new AnswerOption { Id = 4, Text = "Console.Write()" }
+            new AnswerOption { Id = 1, Text = "60" },
+            new AnswerOption { Id = 2, Text = "100" },
+            new AnswerOption { Id = 3, Text = "-60" },
+            new AnswerOption { Id = 4, Text = "32" }
         },
         CorrectAnswerId = 2,
-        Explanation = "WriteLine добавляет символ новой строки после вывода"
+        Explanation = "Необходимо учитывать приоритет выполнения операций и целочисленное деление"
     },
     new Question
     {
@@ -50,7 +59,8 @@ namespace CSharpTestApp.Services
             new AnswerOption { Id = 1, Text = "Console.GetNumber()" },
             new AnswerOption { Id = 2, Text = "int.Parse(Console.ReadLine())" },
             new AnswerOption { Id = 3, Text = "Console.ReadInteger()" },
-            new AnswerOption { Id = 4, Text = "Convert.ToInteger(Console.Read())" }
+            new AnswerOption { Id = 4, Text = "Convert.ToInteger(Console.Read())" },
+            new AnswerOption { Id = 5, Text = "Convert.ToInt32(Console.ReadLine())" },
         },
         CorrectAnswerId = 2
     },
@@ -130,15 +140,14 @@ namespace CSharpTestApp.Services
     {
         Id = 9,
         Topic = "Вывод данных",
-        Text = "Как вывести число 5.0 как целое значение?",
+        Text = "Как вывести число 5.0 как целое значение, используя оператор явного приведения типов (не вызывая методы)??",
         Options = new List<AnswerOption>
         {
             new AnswerOption { Id = 1, Text = "Console.WriteLine((int)5.0);" },
-            new AnswerOption { Id = 2, Text = "Console.WriteLine(5.0.ToString());" },
-            new AnswerOption { Id = 3, Text = "Console.WriteLine(Math.Round(5.0));" },
-            new AnswerOption { Id = 4, Text = "Любой из вариантов" }
+            new AnswerOption { Id = 2, Text = "Console.WriteLine(Convert.ToInt32(5.0));" },
+            new AnswerOption { Id = 3, Text = "Console.WriteLine(5.0.ToString(\"0\"));" }
         },
-        CorrectAnswerId = 1
+        CorrectAnswerId = 1 // Только вариант 1 использует явное приведение
     },
     new Question
     {
@@ -175,22 +184,16 @@ namespace CSharpTestApp.Services
     {
         Id = 12,
         Topic = "Вложенные условия",
-        Text = @"
-Дан следующий код:
+        Text = @"Дан код:
 
-```csharp
-if (a > 5)
-{
-    Console.WriteLine(""""A"""");
-}
-else if (a < 3)
-{
-    Console.WriteLine(""""B"""");
-}
-else
-{
-    Console.WriteLine(""""C"""");
-}",
+if (a > 5) 
+    Console.WriteLine(""A"");
+else if (a < 3) 
+    Console.WriteLine(""B"");
+else 
+    Console.WriteLine(""C"");
+
+В каком случае выведется ""C""?",
         Options = new List<AnswerOption>
         {
             new AnswerOption { Id = 1, Text = "Когда a > 5" },
@@ -274,7 +277,14 @@ else
     {
         Id = 18,
         Topic = "Условный оператор",
-        Text = "Что выведет код: if (false) Console.Write('A'); else Console.Write('B');?",
+        Text = @"Что выведет код указанный ниже.
+              
+        if (false){
+          Console.Write('A')
+        else 
+          Console.Write('B');
+        }
+",
         Options = new List<AnswerOption>
         {
             new AnswerOption { Id = 1, Text = "A" },
@@ -332,7 +342,11 @@ else
     {
         Id = 22,
         Topic = "Вложенные циклы",
-        Text = "Сколько всего итераций выполнит код: for (int i=0; i<3; i++) for (int j=0; j<2; j++) {...}?",
+        Text = @"Сколько всего итераций выполнит код: 
+        
+        for (int i=0; i<3; i++) 
+            for (int j=0; j<2; j++) 
+                {...}?",
         Options = new List<AnswerOption>
         {
             new AnswerOption { Id = 1, Text = "5" },
@@ -404,15 +418,16 @@ else
     {
         Id = 27,
         Topic = "Цикл while",
-        Text = "Как избежать бесконечного цикла?",
+        Text = "Как обеспечить выход из бесконечного цикла?",
         Options = new List<AnswerOption>
         {
             new AnswerOption { Id = 1, Text = "Использовать break" },
-            new AnswerOption { Id = 2, Text = "Обеспечить изменение условия" },
-            new AnswerOption { Id = 3, Text = "Добавить sleep" },
-            new AnswerOption { Id = 4, Text = "Все варианты верны" }
+            new AnswerOption { Id = 2, Text = "Изменить условие цикла" },
+            new AnswerOption { Id = 3, Text = "Добавить sleep между итерациями" },
+            new AnswerOption { Id = 4, Text = "Варианты 1 и 2" } // Правильный ответ
         },
-        CorrectAnswerId = 4
+        CorrectAnswerId = 4,
+        Explanation = "Sleep только приостанавливает цикл, но не обеспечивает выход. Для выхода нужно break или изменение условия."
     },
     new Question
     {
@@ -421,7 +436,7 @@ else
         Text = "Как записать цикл от 10 до 1 включительно?",
         Options = new List<AnswerOption>
         {
-            new AnswerOption { Id = 1, Text = "for (int i=10; i>0; i--)" },
+            new AnswerOption { Id = 1, Text = "for (int i=10; i>1; i--)" },
             new AnswerOption { Id = 2, Text = "for (int i=10; i>=1; i--)" },
             new AnswerOption { Id = 3, Text = "for (int i=10; i==1; i-)" },
             new AnswerOption { Id = 4, Text = "for (int i=10; i<=1; i++)" }
@@ -432,7 +447,11 @@ else
     {
         Id = 29,
         Topic = "Вложенные циклы",
-        Text = "Что выведет код: for (int i=1; i<=2; i++) for (int j=1; j<=i; j++) Console.Write(j);?",
+        Text = @"Что выведет код: 
+        
+          for (int i=1; i<=2; i++) 
+            for (int j=1; j<=i; j++) 
+                Console.Write(j);?",
         Options = new List<AnswerOption>
         {
             new AnswerOption { Id = 1, Text = "11" },
@@ -440,7 +459,7 @@ else
             new AnswerOption { Id = 3, Text = "121" },
             new AnswerOption { Id = 4, Text = "11212" }
         },
-        CorrectAnswerId = 4
+        CorrectAnswerId = 2
     },
     new Question
     {
@@ -496,7 +515,7 @@ else
         {
             new AnswerOption { Id = 1, Text = "str1 + str2" },
             new AnswerOption { Id = 2, Text = "str1.Concat(str2)" },
-            new AnswerOption { Id = 3, Text = "String.Join(str1, str2)" },
+            new AnswerOption { Id = 3, Text = "String.Join(\"\", str1, str2)" },
             new AnswerOption { Id = 4, Text = "Любой вариант" }
         },
         CorrectAnswerId = 4
@@ -650,7 +669,7 @@ else
     {
         Id = 44,
         Topic = "Массивы",
-        Text = "Как создать массив из 3 целых чисел?",
+        Text = "Как создать и сразу инициализировать массив из 3 целых чисел?",
         Options = new List<AnswerOption>
         {
             new AnswerOption { Id = 1, Text = "int[] arr = {1,2,3};" },
@@ -682,7 +701,6 @@ else
         Options = new List<AnswerOption>
         {
             new AnswerOption { Id = 1, Text = "int[,] matrix = new int[2,3];" },
-            new AnswerOption { Id = 2, Text = "int[][] matrix = new int[2][3];" },
             new AnswerOption { Id = 3, Text = "int[2] matrix = new int[3];" },
             new AnswerOption { Id = 4, Text = "int matrix = [2,3];" }
         },
@@ -742,6 +760,55 @@ else
             new AnswerOption { Id = 2, Text = "Таблица значений" },
             new AnswerOption { Id = 3, Text = "Коллекция разных типов" },
             new AnswerOption { Id = 4, Text = "Специальный класс" }
+        },
+        CorrectAnswerId = 1
+    },
+    new Question
+    {
+        Id = 51,
+        Topic = "Циклы",
+        Text = @"
+
+Сумма последних трех цифр
+
+```
+        Дано натуральное число. Найди сумму последних трех цифр.
+        Формат входных данных:
+            Одно натуральное число, не превосходящее 10 в 9 степени (1000000000).
+
+        Формат выходных данных:
+            Одно число - сумма последних трех цифр исходного числа.
+
+        Рассмотрим первый тест:
+        На вход получаем  число:
+
+        65421
+        Последние три цифры числа 4 2 1. Найдем их сумму: 4 + 2 + 1 = 7.
+
+        Выведем результат в консоль:
+            7
+
+        Примеры:
+
+        Sample Input:
+        65421
+        Sample Output 1:
+            7
+
+        Sample Input 2:
+        25
+        Sample Output 2:
+            7
+
+        Sample Input 3:
+        951
+        Sample Output 3:
+            15
+```
+",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = @"Решение с автором" }
         },
         CorrectAnswerId = 1
     }
