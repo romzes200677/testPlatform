@@ -13,7 +13,7 @@ const QuestionCard = ({ question, onSelect, selectedAnswer }) => {
     <div className={styles.card}>
       <div className={styles.header}>
         <span className={styles.id}>Вопрос {question.id || '?'}</span>
-        <h3 className={styles.title}>{question.Topic || 'Без темы'}</h3>
+        <h3 className={styles.title}>{question.topic || 'Без темы'}</h3>
         
         <div className={styles.text}>
           <ReactMarkdown>

@@ -176,7 +176,7 @@ namespace CSharpTestApp.Services
         Id = 12,
         Topic = "Вложенные условия",
         Text = @"
-@""Дан следующий код:
+Дан следующий код:
 
 ```csharp
 if (a > 5)
