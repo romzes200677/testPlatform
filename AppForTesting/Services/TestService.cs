@@ -465,16 +465,17 @@ else
     {
         Id = 30,
         Topic = "Цикл for",
-        Text = "Какая переменная сохранит значение после цикла: for (int i=0; i<5; i++){...}?",
+        Text = "Какие переменные сохранят значение после цикла: for (int i=0; i<5; i++){...}?",
         Options = new List<AnswerOption>
         {
-            new AnswerOption { Id = 1, Text = "i" },
-            new AnswerOption { Id = 2, Text = "Все созданные в цикле" },
-            new AnswerOption { Id = 3, Text = "Никакая" },
-            new AnswerOption { Id = 4, Text = "Только объявленные до цикла" }
+            new AnswerOption { Id = 1, Text = "Переменная i" },
+            new AnswerOption { Id = 2, Text = "Переменные, объявленные внутри цикла" },
+            new AnswerOption { Id = 3, Text = "Все созданные в цикле переменные" },
+            new AnswerOption { Id = 4, Text = "Только переменные, объявленные до цикла" },
+            new AnswerOption { Id = 5, Text = "Варианты 1 и 2" }
         },
-        CorrectAnswerId = 3,
-        Explanation = "i уничтожается после завершения цикла"
+        CorrectAnswerId = 4, // Только переменные ДО цикла
+        Explanation = "Переменные в заголовке цикла (i) и внутри его тела уничтожаются после выполнения. Сохраняются только переменные, объявленные до цикла."
     },
 
     // Раздел 5: Строки и символы (5 вопросов)
