@@ -1,3 +1,4 @@
+using CSharpTestApp.Infrastructure;
 using CSharpTestApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,10 @@ builder.Services.AddCors(options => {
     });
 });
 builder.Services.AddScoped<TestService>();
+builder.Services.AddScoped<ICodeTester, CodeTester>();
+builder.Services.AddScoped<CompilationResult>();
+builder.Services.AddScoped<TestRunResult>();
+builder.Services.AddScoped<ITestRepository, InMemoryTestRepository>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSpaStaticFiles(configuration => 
 {

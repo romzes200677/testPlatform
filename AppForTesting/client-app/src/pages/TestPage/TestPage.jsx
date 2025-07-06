@@ -5,6 +5,7 @@ import { fetchQuestions, submitAnswers } from '../../services/testService';
 import Timer from '../../components/Timer/Timer';
 import QuestionCard from '../../components/QuestionCard/QuestionCard';
 import styles from './TestPage.module.css'; // Импорт CSS-модуля
+import { Link } from 'react-router-dom';
 
 export default function TestPage() {
     const [questions, setQuestions] = useState([]);
@@ -107,6 +108,7 @@ export default function TestPage() {
                 timeLeft={timeLeft}
                 onTimeUp={handleTimeUp}
             />
+            <Link to="/assignment/math-1">Перейти к решению задач</Link>
 
             {questions.length > 0 ? (
                 questions.map(question => (

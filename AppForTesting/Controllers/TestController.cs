@@ -1,3 +1,4 @@
+using CSharpTestApp.Infrastructure;
 using CSharpTestApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using CSharpTestApp.Services;
@@ -9,14 +10,25 @@ namespace CSharpTestApp.Controllers
     public class TestController : ControllerBase
     {
         private readonly TestService _testService;
-        
-        public TestController(TestService testService)
+        private readonly ICodeTester _codeTester;
+        private readonly ITestRepository _testRepository;
+
+        public TestController(TestService testService, ICodeTester codeTester, ITestRepository testRepository)
         {
             _testService = testService;
+            _codeTester = codeTester;
+            _testRepository = testRepository;
         }
-        
+
         [HttpGet("questions")]
         public IActionResult GetQuestions()
+        {
+            var questions = _testService.GenerateTest();
+            return Ok(questions);
+        }
+        
+        [HttpGet("decisions")]
+        public IActionResult GetDecisions(int questionId)
         {
             var questions = _testService.GenerateTest();
             return Ok(questions);
@@ -29,5 +41,77 @@ namespace CSharpTestApp.Controllers
             var result = _testService.EvaluateTest(userAnswers, questions);
             return Ok(result);
         }
+        
+        [HttpPost("execute")]
+        public async Task<ActionResult<CodeExecutionResponse>> ExecuteCode([FromBody] CodeExecutionRequest request)
+        {
+            // Получаем тесты для задания (из базы данных или файла конфигурации)
+            var tests = await _testService.GetTests(request.AssignmentId);
+    
+            // Заменяем placeholder в шаблоне
+            string fullCode = request.MainMethodTemplate.Replace("###", request.UserCode);
+    
+            // Выполняем тесты
+            var testResult = _codeTester.RunTests(fullCode, tests);
+    
+            // Формируем ответ
+            return new CodeExecutionResponse
+            {
+                IsSuccess = testResult.IsSuccess,
+                FailedTests = testResult.FailedTests.Select(t => new TestResultDto
+                {
+                    TestName = t.Name,
+                    Expected = t.ExpectedResult?.ToString(),
+                    Actual = t.ActualResult,
+                    ErrorMessage = t.ErrorMessage
+                }).ToList(),
+                CompilationError = testResult.CompilationError,
+                Output = testResult.Output,
+                ExecutionTime = testResult.ExecutionTime.TotalMilliseconds
+            };
+        }
+        
+        
+    }
+    
+    // DTO для ответа
+    public class TestResultDto
+    {
+        public string TestName { get; set; }
+        public string Expected { get; set; }
+        public string Actual { get; set; }
+        public string ErrorMessage { get; set; }
+    }
+
+    public class CodeExecutionResponse
+    {
+        public bool IsSuccess { get; set; }
+        public List<TestResultDto> FailedTests { get; set; } = new();
+        public string CompilationError { get; set; }
+        public string Output { get; set; }
+        public double ExecutionTime { get; set; }
+    }
+    
+    public class CodeExecutionRequest
+    {
+        /// <summary>
+        /// Идентификатор задания (для получения соответствующих тестов)
+        /// </summary>
+        public string AssignmentId { get; set; }
+
+        /// <summary>
+        /// Текст задания с поддержкой Markdown
+        /// </summary>
+        public string AssignmentText { get; set; }
+
+        /// <summary>
+        /// Шаблон метода Main с плейсхолдером ###
+        /// </summary>
+        public string MainMethodTemplate { get; set; }
+
+        /// <summary>
+        /// Код пользователя для вставки в плейсхолдер ###
+        /// </summary>
+        public string UserCode { get; set; }
     }
 }

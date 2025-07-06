@@ -850,5 +850,59 @@ else
                 IncorrectAnswers = incorrectAnswers
             };
         }
+
+        public async Task<List<UnitTest>> GetTests(string userId)
+        {
+            return await Task.FromResult(new List<UnitTest>
+            {
+                // Тесты для калькулятора
+                new UnitTest
+                {
+                    Name = "Addition of positive numbers",
+                    MethodName = "Add",
+                    Parameters = new object[] { 5, 3 },
+                    ExpectedResult = 8
+                },
+                new UnitTest
+                {
+                    Name = "Addition with zero",
+                    MethodName = "Add",
+                    Parameters = new object[] { 5, 0 },
+                    ExpectedResult = 5
+                },
+                new UnitTest
+                {
+                    Name = "Negative numbers addition",
+                    MethodName = "Add",
+                    Parameters = new object[] { -5, -3 },
+                    ExpectedResult = -8
+                },
+                
+                // Тесты для строковых операций
+                new UnitTest
+                {
+                    Name = "String concatenation",
+                    MethodName = "Concat",
+                    Parameters = new object[] { "Hello", "World" },
+                    ExpectedResult = "HelloWorld"
+                },
+                new UnitTest
+                {
+                    Name = "Empty string concatenation",
+                    MethodName = "Concat",
+                    Parameters = new object[] { "Test", "" },
+                    ExpectedResult = "Test"
+                },
+                
+                // Тест для проверки null
+                new UnitTest
+                {
+                    Name = "Null handling test",
+                    MethodName = "SafeConcat",
+                    Parameters = new object[] { null, "value" },
+                    ExpectedResult = "nullvalue"
+                }
+            });
+        }
     }
 }

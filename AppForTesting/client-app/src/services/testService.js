@@ -36,3 +36,24 @@ export const submitAnswers = async (answers) => {
         throw error;
     }
 };
+
+export const submitDecision = async (answers) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/test/execute`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(answers)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Ошибка при отправке ответов:", error);
+        throw error;
+    }
+};
