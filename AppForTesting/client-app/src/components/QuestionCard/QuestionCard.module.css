@@ -1,0 +1,79 @@
+.card {
+  background-color: var(--card-bg-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 25px;
+  margin-bottom: 30px;
+  text-align: left;
+  border: 1px solid #eee;
+}
+
+.header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.id {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--text-dark) !important;
+  line-height: 1.5;
+}
+
+.text {
+  color: var(--text-dark) !important;
+  font-size: 1.3rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.optionsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.noOptions {
+  padding: 20px;
+  text-align: center;
+  color: var(--gray);
+}
+
+/* Markdown styles */
+.text pre {
+  background-color: #f6f8fa;
+  padding: 15px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 15px 0;
+}
+
+.text code {
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+}
+
+.text p {
+  margin: 10px 0;
+}
+
+/* Dark theme */
+@media (prefers-color-scheme: dark) {
+  .card {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+  }
+  
+  .text, .title {
+    color: #e0e0e0 !important;
+  }
+}

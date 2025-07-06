@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTestContext } from '../contexts/TestContext';
-import { fetchQuestions, submitAnswers } from '../services/testService';
-import Timer from '../components/Timer';
-import QuestionCard from '../components/QuestionCard';
+import { useTestContext } from '../../contexts/TestContext';
+import { fetchQuestions, submitAnswers } from '../../services/testService';
+import Timer from '../../components/Timer/Timer';
+import QuestionCard from '../../components/QuestionCard/QuestionCard';
+import styles from './TestPage.module.css'; // Импорт CSS-модуля
 
 export default function TestPage() {
     const [questions, setQuestions] = useState([]);
@@ -55,11 +56,11 @@ export default function TestPage() {
     }, []);
 
    const handleAnswerSelect = (questionId, answerId) => {
-  setAnswers(prev => ({
-    ...prev,
-    [questionId]: Number(answerId) // Приводим к числу
-  }));
-};
+        setAnswers(prev => ({
+            ...prev,
+            [questionId]: Number(answerId) // Приводим к числу
+        }));
+    };
 
     const handleSubmit = async () => {
         try {
@@ -77,25 +78,21 @@ export default function TestPage() {
             }
 
             // Обрабатываем результат
-                    setTestResult({
-            correctAnswers: result.correctAnswers,
-            totalQuestions: result.totalQuestions,
-            incorrectAnswers: result.incorrectAnswers.map(item => ({
-                // Сохраняем ВЕСЬ объект вопроса, а не только текст
-                Question: {
-                    id: item.question.id,
-                    text: item.question.text,
-                    topic: item.question.topic,
-                    options: item.question.options,
-                    correctAnswerId: item.question.correctAnswerId,
-                    explanation: item.question.explanation
-                },
-                SelectedAnswerId: item.selectedAnswerId,
-                // Эти поля можно удалить, они будут вычисляться в ResultsPage
-                // SelectedAnswerText: ...,
-                // CorrectAnswerText: ...,
-            }))
-        });
+            setTestResult({
+                correctAnswers: result.correctAnswers,
+                totalQuestions: result.totalQuestions,
+                incorrectAnswers: result.incorrectAnswers.map(item => ({
+                    Question: {
+                        id: item.question.id,
+                        text: item.question.text,
+                        topic: item.question.topic,
+                        options: item.question.options,
+                        correctAnswerId: item.question.correctAnswerId,
+                        explanation: item.question.explanation
+                    },
+                    SelectedAnswerId: item.selectedAnswerId,
+                }))
+            });
 
             navigate('/results');
         } catch (error) {
@@ -105,7 +102,7 @@ export default function TestPage() {
     };
 
     return (
-        <div className="test-container">
+        <div className={styles.container}>
             <Timer
                 timeLeft={timeLeft}
                 onTimeUp={handleTimeUp}
@@ -121,8 +118,8 @@ export default function TestPage() {
                     />
                 ))
             ) : (
-                <div className="loading-questions">
-                    <div className="spinner"></div>
+                <div className={styles.loading}>
+                    <div className={styles.spinner}></div>
                     <p>Загрузка вопросов...</p>
                 </div>
             )}
@@ -130,7 +127,7 @@ export default function TestPage() {
             <button
                 onClick={handleSubmit}
                 disabled={timeLeft === 0}
-                className="submit-btn"
+                className={styles.submitButton}
             >
                 {timeLeft === 0 ? 'Время вышло!' : 'Завершить тест'}
             </button>

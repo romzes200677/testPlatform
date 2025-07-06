@@ -175,15 +175,30 @@ namespace CSharpTestApp.Services
     {
         Id = 12,
         Topic = "Вложенные условия",
-        Text = "Когда выполнится блок else в конструкции if-else-if?",
+        Text = @"
+@""Дан следующий код:
+
+```csharp
+if (a > 5)
+{
+    Console.WriteLine(""""A"""");
+}
+else if (a < 3)
+{
+    Console.WriteLine(""""B"""");
+}
+else
+{
+    Console.WriteLine(""""C"""");
+}",
         Options = new List<AnswerOption>
         {
-            new AnswerOption { Id = 1, Text = "При истинности первого условия" },
-            new AnswerOption { Id = 2, Text = "При ложности всех условий" },
-            new AnswerOption { Id = 3, Text = "При истинности последнего условия" },
-            new AnswerOption { Id = 4, Text = "Всегда" }
+            new AnswerOption { Id = 1, Text = "Когда a > 5" },
+            new AnswerOption { Id = 2, Text = "Когда a < 3" },
+            new AnswerOption { Id = 3, Text = "Когда a >= 3 и a <= 5" },
+            new AnswerOption { Id = 4, Text = "Никогда" }
         },
-        CorrectAnswerId = 2
+        CorrectAnswerId = 3
     },
     new Question
     {

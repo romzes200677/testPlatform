@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { TestProvider } from './contexts/TestContext';
-import TestPage from './pages/TestPage';
-import ResultsPage from './pages/ResultsPage';
+import TestPage from './pages/TestPage/TestPage'; // Прямой импорт
+import ResultsPage from './pages/ResultsPage/ResultsPage'; // Прямой импорт
 
 function App() {
     return (
