@@ -28,7 +28,7 @@ const QuestionCard = ({ question, onSelect, selectedAnswer }) => {
             <AnswerOption
               key={`option_${question.id}_${option.id}`}
               option={option}
-              questionid={question.id}
+              questionId={question.id}
               selectedAnswer={selectedAnswer}
               onSelect={onSelect}
             />
