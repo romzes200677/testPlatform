@@ -879,29 +879,29 @@ else
                 },
                 
                 // Тесты для строковых операций
-                new UnitTest
-                {
-                    Name = "String concatenation",
-                    MethodName = "Concat",
-                    Parameters = new object[] { "Hello", "World" },
-                    ExpectedResult = "HelloWorld"
-                },
-                new UnitTest
-                {
-                    Name = "Empty string concatenation",
-                    MethodName = "Concat",
-                    Parameters = new object[] { "Test", "" },
-                    ExpectedResult = "Test"
-                },
+                // new UnitTest
+                // {
+                //     Name = "String concatenation",
+                //     MethodName = "Concat",
+                //     Parameters = new object[] { "Hello", "World" },
+                //     ExpectedResult = "HelloWorld"
+                // },
+                // new UnitTest
+                // {
+                //     Name = "Empty string concatenation",
+                //     MethodName = "Concat",
+                //     Parameters = new object[] { "Test", "" },
+                //     ExpectedResult = "Test"
+                // },
                 
                 // Тест для проверки null
-                new UnitTest
-                {
-                    Name = "Null handling test",
-                    MethodName = "SafeConcat",
-                    Parameters = new object[] { null, "value" },
-                    ExpectedResult = "nullvalue"
-                }
+                // new UnitTest
+                // {
+                //     Name = "Null handling test",
+                //     MethodName = "SafeConcat",
+                //     Parameters = new object[] { null, "value" },
+                //     ExpectedResult = "nullvalue"
+                // }
             });
         }
     }

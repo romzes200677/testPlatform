@@ -55,50 +55,92 @@ public class CodeTester : ICodeTester
         return result;
     }
 
-    private CompilationResult CompileCode(string sourceCode)
+  private CompilationResult CompileCode(string sourceCode)
     {
-        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(sourceCode);
-    
+        // Указываем версию языка для пользовательского кода
+        var parseOptions = CSharpParseOptions.Default
+            .WithLanguageVersion(LanguageVersion.CSharp12);
+        
+        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(sourceCode, parseOptions);
         string assemblyName = Path.GetRandomFileName();
-        var references = new MetadataReference[]
-        {
-            MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(System.Linq.Enumerable).Assembly.Location),
-            MetadataReference.CreateFromFile(Assembly.GetEntryAssembly().Location)
-        };
 
+        List<MetadataReference> references = GetSystemReferences();
+        references.Add(MetadataReference.CreateFromFile(Assembly.GetEntryAssembly().Location));
+
+        // Настройки компиляции с явным указанием версии
+        var compilationOptions = new CSharpCompilationOptions(
+            OutputKind.DynamicallyLinkedLibrary,
+            optimizationLevel: OptimizationLevel.Release,
+            platform: Platform.AnyCpu
+        ).WithSpecificDiagnosticOptions(new Dictionary<string, ReportDiagnostic>
+        {
+            { "CS8019", ReportDiagnostic.Suppress }
+        });
+
+        // ИСПРАВЛЕНИЕ: Заменяем коллекционное выражение на традиционный синтаксис
         CSharpCompilation compilation = CSharpCompilation.Create(
             assemblyName,
-            syntaxTrees: new[] { syntaxTree },
+            syntaxTrees: new SyntaxTree[] { syntaxTree }, // Явное создание массива
             references: references,
-            options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+            options: compilationOptions
+        );
 
-        using (var ms = new MemoryStream())
+        using var ms = new MemoryStream();
+        EmitResult result = compilation.Emit(ms);
+
+        if (!result.Success)
         {
-            EmitResult result = compilation.Emit(ms);
-        
-            if (!result.Success)
-            {
-                var errors = result.Diagnostics
-                    .Where(d => d.IsWarningAsError || d.Severity == DiagnosticSeverity.Error)
-                    .Select(d => d.GetMessage())
-                    .ToList();
+            var errors = result.Diagnostics
+                .Where(d => d.Severity == DiagnosticSeverity.Error)
+                .Select(d => $"{d.Id}: {d.GetMessage()}")
+                .ToList();
             
-                return new CompilationResult
-                {
-                    Success = false,
-                    ErrorMessage = string.Join("\n", errors)
-                };
-            }
-        
-            ms.Seek(0, SeekOrigin.Begin);
             return new CompilationResult
             {
-                Success = true,
-                AssemblyBytes = ms.ToArray() // Сохраняем байты сборки
+                Success = false,
+                ErrorMessage = string.Join("\n", errors)
             };
         }
+
+        ms.Seek(0, SeekOrigin.Begin);
+        return new CompilationResult
+        {
+            Success = true,
+            AssemblyBytes = ms.ToArray()
+        };
+    }
+
+    private List<MetadataReference> GetSystemReferences()
+    {
+        var references = new List<MetadataReference>();
+        
+        string? trustedAssemblies = AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES") as string;
+        
+        if (!string.IsNullOrEmpty(trustedAssemblies))
+        {
+            char separator = Path.PathSeparator;
+            foreach (var path in trustedAssemblies.Split(separator))
+            {
+                if (File.Exists(path))
+                {
+                    references.Add(MetadataReference.CreateFromFile(path));
+                }
+            }
+        }
+        else
+        {
+            // Fallback для .NET Framework или старых версий
+            references.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
+            references.Add(MetadataReference.CreateFromFile(typeof(Console).Assembly.Location));
+            references.Add(MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location));
+            references.Add(MetadataReference.CreateFromFile(typeof(System.Runtime.GCSettings).Assembly.Location));
+        }
+
+        // Добавляем обязательные сборки для .NET 8
+        references.Add(MetadataReference.CreateFromFile(typeof(System.Runtime.CompilerServices.Unsafe).Assembly.Location));
+        references.Add(MetadataReference.CreateFromFile(typeof(System.Diagnostics.Debug).Assembly.Location));
+        
+        return references;
     }
 }
 
