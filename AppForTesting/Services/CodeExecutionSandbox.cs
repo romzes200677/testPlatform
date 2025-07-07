@@ -112,6 +112,8 @@ public class CodeExecutionSandbox : IDisposable
                     result.FailedTests.Add(test);
                 }
             }
+
+            result.IsSuccess = !result.FailedTests.Any();
         }
     }
 }

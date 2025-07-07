@@ -60,6 +60,17 @@ public class Calculator
         return a/b;
     }
 
+    public string Concat(string a, string b){
+        return a+b;
+    }
+
+    public string SafeConcat(string? a, string? b){
+        return a??"null"+b??"null";
+    }
+
+    public string Tst(string? a, string? b){
+        return "abc";
+    }
         
 }
     `,
