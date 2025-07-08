@@ -30,7 +30,7 @@ namespace CSharpTestApp.Controllers
         [HttpGet("decisions")]
         public IActionResult GetDecisions(int questionId)
         {
-            var questions = _testService.GenerateTest();
+            var questions = _testService.GenerateArthurTests();
             return Ok(questions);
         }
         
@@ -45,42 +45,31 @@ namespace CSharpTestApp.Controllers
         [HttpPost("execute")]
         public async Task<ActionResult<CodeExecutionResponse>> ExecuteCode([FromBody] CodeExecutionRequest request)
         {
-            // Получаем тесты для задания (из базы данных или файла конфигурации)
-            var tests = await _testService.GetTests(request.AssignmentId);
-    
-            // Заменяем placeholder в шаблоне
+            var tests = _testService.GenerateArthurTests();
             string fullCode = request.MainMethodTemplate.Replace("###", request.UserCode);
-    
-            // Выполняем тесты
+
             var testResult = _codeTester.RunTests(fullCode, tests);
-    
-            // Формируем ответ
+
             return new CodeExecutionResponse
             {
-                IsSuccess = testResult.IsSuccess,
+                // ... остальные свойства ...
                 FailedTests = testResult.FailedTests.Select(t => new TestResultDto
                 {
                     TestName = t.Name,
-                    Expected = t.ExpectedResult?.ToString(),
-                    Actual = t.ActualResult,
-                    ErrorMessage = t.ErrorMessage
-                }).ToList(),
-                CompilationError = testResult.CompilationError,
-                Output = testResult.Output,
-                ExecutionTime = testResult.ExecutionTime.TotalMilliseconds
+                    Inputs = t.Inputs, // Используем список строк
+                    Expected = t.ExpectedOutput,
+                    Actual = t.ActualOutput
+                }).ToList()
             };
         }
-        
-        
     }
     
-    // DTO для ответа
     public class TestResultDto
     {
         public string TestName { get; set; }
+        public List<string> Inputs { get; set; } // Изменено на список строк
         public string Expected { get; set; }
         public string Actual { get; set; }
-        public string ErrorMessage { get; set; }
     }
 
     public class CodeExecutionResponse

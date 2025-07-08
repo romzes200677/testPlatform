@@ -20,7 +20,6 @@ public class CodeTester : ICodeTester
     
         try
         {
-            // Компиляция кода
             var compilationResult = CompileCode(sourceCode);
             if (!compilationResult.Success)
             {
@@ -28,14 +27,12 @@ public class CodeTester : ICodeTester
                 return result;
             }
 
-            // Используем песочницу для выполнения
             using (var sandbox = new CodeExecutionSandbox())
             {
                 var sandboxResult = sandbox.ExecuteTests(
                     compilationResult.AssemblyBytes, 
                     tests);
-            
-                // Копируем результаты из песочницы
+                
                 result.IsSuccess = sandboxResult.IsSuccess;
                 result.FailedTests = sandboxResult.FailedTests;
                 result.CompilationError = sandboxResult.CompilationError;
@@ -55,9 +52,8 @@ public class CodeTester : ICodeTester
         return result;
     }
 
-  private CompilationResult CompileCode(string sourceCode)
+    private CompilationResult CompileCode(string sourceCode)
     {
-        // Указываем версию языка для пользовательского кода
         var parseOptions = CSharpParseOptions.Default
             .WithLanguageVersion(LanguageVersion.CSharp12);
         
@@ -67,9 +63,8 @@ public class CodeTester : ICodeTester
         List<MetadataReference> references = GetSystemReferences();
         references.Add(MetadataReference.CreateFromFile(Assembly.GetEntryAssembly().Location));
 
-        // Настройки компиляции с явным указанием версии
         var compilationOptions = new CSharpCompilationOptions(
-            OutputKind.DynamicallyLinkedLibrary,
+            OutputKind.ConsoleApplication, // Изменено на консольное приложение
             optimizationLevel: OptimizationLevel.Release,
             platform: Platform.AnyCpu
         ).WithSpecificDiagnosticOptions(new Dictionary<string, ReportDiagnostic>
@@ -77,10 +72,9 @@ public class CodeTester : ICodeTester
             { "CS8019", ReportDiagnostic.Suppress }
         });
 
-        // ИСПРАВЛЕНИЕ: Заменяем коллекционное выражение на традиционный синтаксис
         CSharpCompilation compilation = CSharpCompilation.Create(
             assemblyName,
-            syntaxTrees: new SyntaxTree[] { syntaxTree }, // Явное создание массива
+            syntaxTrees: new[] { syntaxTree },
             references: references,
             options: compilationOptions
         );
@@ -144,25 +138,20 @@ public class CodeTester : ICodeTester
     }
 }
 
-// Вспомогательный класс для результатов компиляции
 public class CompilationResult
 {
     public bool Success { get; set; }
-    public byte[] AssemblyBytes { get; set; } // Теперь здесь хранятся байты сборки
+    public byte[] AssemblyBytes { get; set; }
     public string ErrorMessage { get; set; }
 }
 
-// Результат выполнения тестов
 public class TestRunResult
 {
-    public bool IsSuccess { get; set; }               // Общий результат
-    public List<UnitTest> FailedTests { get; set; }   // Непройденные тесты
-    public string CompilationError { get; set; }      // Ошибки компиляции
-    public string Output { get; set; }                // Вывод программы
-    public TimeSpan ExecutionTime { get; set; }       // Время выполнения
-
-    public TestRunResult()
-    {
-        FailedTests = new List<UnitTest>();
-    }
+    public bool IsSuccess { get; set; }
+    public List<UnitTest> FailedTests { get; set; } = new();
+    public string CompilationError { get; set; }
+    public string Output { get; set; }
+    public TimeSpan ExecutionTime { get; set; }
 }
+
+

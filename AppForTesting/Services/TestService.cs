@@ -815,6 +815,37 @@ else
     }
 };
         }
+        public List<UnitTest> GenerateArthurTests()
+        {
+            return new List<UnitTest>
+            {
+                // new UnitTest
+                // {
+                //     Name = "Sample Input 1",
+                //     Inputs = new List<string> { "65421" }, // Используем список
+                //     ExpectedOutput = "7"
+                // },
+                // new UnitTest
+                // {
+                //     Name = "Sample Input 2",
+                //     Inputs = new List<string> { "25" }, // Используем список
+                //     ExpectedOutput = "7"
+                // },
+                // new UnitTest
+                // {
+                //     Name = "Sample Input 3",
+                //     Inputs = new List<string> { "951" }, // Используем список
+                //     ExpectedOutput = "15"
+                // },
+                new UnitTest
+                {
+                    Name = "Multi Input Test",
+                    Inputs = new List<string> { "1", "2", "3" },
+                    ExpectedOutput = "6"
+                }
+                
+            };
+        }
 
         public TestResult EvaluateTest(List<UserAnswer> userAnswers, List<Question> questions)
         {
@@ -862,52 +893,6 @@ else
                     MethodName = "Add",
                     Parameters = new object[] { 5, 3 },
                     ExpectedResult = 8
-                },
-                new UnitTest
-                {
-                    Name = "Addition with zero",
-                    MethodName = "Add",
-                    Parameters = new object[] { 5, 0 },
-                    ExpectedResult = 5
-                },
-                new UnitTest
-                {
-                    Name = "Negative numbers addition",
-                    MethodName = "Add",
-                    Parameters = new object[] { -5, -3 },
-                    ExpectedResult = -8
-                },
-                
-                // Тесты для строковых операций
-                new UnitTest
-                {
-                    Name = "String concatenation",
-                    MethodName = "Concat",
-                    Parameters = new object[] { "Hello", "World" },
-                    ExpectedResult = "HelloWorld"
-                },
-                new UnitTest
-                {
-                    Name = "Empty string concatenation",
-                    MethodName = "Concat",
-                    Parameters = new object[] { "Test", "" },
-                    ExpectedResult = "Test"
-                },
-                
-                // Тест для проверки null
-                new UnitTest
-                {
-                    Name = "Null handling test",
-                    MethodName = "SafeConcat",
-                    Parameters = new object[] { null, "value" },
-                    ExpectedResult = "nullvalue"
-                },
-                new UnitTest
-                {
-                    Name = "Check Tst",
-                    MethodName = "Tst",
-                    Parameters = new object[] { "ddd", "value" },
-                    ExpectedResult = "cde"
                 }
             });
         }

@@ -19,65 +19,89 @@ useEffect(() => {
     id: 'math-1',
     title: 'Задание: Калькулятор',
     description: `
-      <h2>Создайте простой калькулятор</h2>
-      <p>Реализуйте класс Calculator со следующими методами:</p>
-      <ul>
-        <li><code>Add(int a, int b)</code> - возвращает сумму чисел</li>
-        <li><code>Subtract(int a, int b)</code> - возвращает разность чисел</li>
-        <li><code>Multiply(int a, int b)</code> - возвращает произведение чисел</li>
-        <li><code>Divide(int a, int b)</code> - возвращает результат деления</li>
-      </ul>
-      <p>В методе Main создайте экземпляр калькулятора и продемонстрируйте его работу.</p>
+      
+<!----><span><h2 style="text-align:center;">Артур и поход в магазин</h2>
+
+<p>Сегодня Артур ждёт в гости своего друга Давида. Чтобы подготовиться к встрече, Артур должен посетить два магазина, расположенных рядом с его домом.<br>
+От дома к первому магазину ведёт дорожка длиной&nbsp;<code><samp>d<span style="font-size:12px;">1</span></samp></code>&nbsp;метров, ко второму — дорожка длиной &nbsp;<code><samp>d2</samp></code>&nbsp;метров. Также существует дорожка длиной&nbsp;<code><samp>d3</samp></code>&nbsp;метров, напрямую соединяющая два магазина.<br>
+Помоги Артуру вычислить минимальное расстояние, которое ему потребуется пройти, чтобы посетить оба магазина и вернуться домой.<br>
+Артур всегда начинает путь из дома.&nbsp;Он должен побывать <strong>в обоих магазинах</strong>, перемещаясь <strong>только по имеющимся трём дорожкам</strong>&nbsp;и вернуться домой.<br>
+При этом его не смущает, если он пройдёт по одной и той же дорожке несколько раз или окажется в одном и том же магазине дважды — главное, чтобы общий путь был <strong>как можно короче</strong>.</p>
+
+<p>&nbsp;</p>
+
+<p><strong>Формат входных данных:</strong><br>
+Три целых числа <code><samp>d<span style="font-size:12px;">1</span></samp></code>, <code><samp>d<span style="font-size:12px;">2</span></samp></code>, <code><samp>d<span style="font-size:12px;">3</span></samp></code>&nbsp;(<em><samp>1 <span class="math-tex"><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>≤</mo></mrow><annotation encoding="application/x-tex">\le</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.77194em; vertical-align: -0.13597em;"></span><span class="mrel">≤</span></span></span></span></span></span> d<sub>1</sub>, d<sub>2</sub>, d<sub>3</sub> <span class="math-tex"><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>≤</mo></mrow><annotation encoding="application/x-tex">\le</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.77194em; vertical-align: -0.13597em;"></span><span class="mrel">≤</span></span></span></span></span></span> 10<sup>8</sup></samp></em>)&nbsp;— длины дорожек:</p>
+
+<ul>
+	<li><code><samp>d1</samp></code>&nbsp;— длина дорожки, соединяющей дом Артура и первый магазин;</li>
+	<li><code><samp>d2</samp></code>&nbsp;— длина дорожки, соединяющей дом Артура и второй магазин;</li>
+	<li><code><samp>d3</samp></code>&nbsp;— длина дорожки, соединяющей два магазина.</li>
+</ul>
+
+<p><strong>Формат выходных данных:</strong><br>
+Одно число — минимальное количество метров, которое потребуется пройти Артуру,&nbsp;чтобы посетить оба магазина и вернуться домой.</p>
+
+<p>&nbsp;</p>
+
+<p><strong>Рассмотрим первый тест:</strong><br>
+На вход получаем&nbsp; строки:</p>
+
+<pre><code class="language-cs hljs language-csharp" data-highlighted="yes"><span class="hljs-number">10</span>
+<span class="hljs-number">20</span>
+<span class="hljs-number">30</span></code></pre>
+
+<p>Посчитаем длину пути Артура, если он из первого магазина вернется домой, а потом пойдет во второй магазин:</p>
+
+<p><em><samp>(10&nbsp;+ 10)&nbsp;+ (20 + 20) = 60</samp></em></p>
+
+<p>Теперь посчитаем длину пути Артура, если он из первого магазина пойдет во второй магазин, а потом вернется домой:</p>
+
+<p><em><samp>10 + 30 + 20 = 60</samp></em></p>
+
+<p>Теперь посчитаем длину пути Артура, если он из первого магазина пойдет во второй магазин, затем вернется домой через первый магазин:</p>
+
+<p><em><samp>10 + 30 + 30 + 10 = 80</samp></em></p>
+
+<p>Теперь посчитаем длину пути Артура, если из дома он пойдет во второй магазин, затем в первый магазин, затем вернется домой через второй магазин:</p>
+
+<p><em><samp>20 + 30 + 30 + 20 = 100</samp></em></p>
+
+<p><strong>Сравним все четыре результата, чтобы найти наименьший.&nbsp;</strong></p>
+
+<p>Выведем результат в консоль:</p>
+
+<pre><code class="language-cs hljs language-csharp" data-highlighted="yes"><span class="hljs-number">60</span></code></pre>
+
+<pre>&nbsp;</pre>
+
+<p><span style="color:#a03881;"><strong>Примечание: </strong></span>иллюстрация для первого теста:</p>
+
+<p style="text-align:center;"><img alt="" height="180" name="f0b39f9ad01ffba4aefd0c1b9a6fc33bcf679e2e.webp" src="/api/images/house.webp" width="350"></p>
+
+<ol>
+	<li>Одним из оптимальных маршрутов является: дом&nbsp;<span class="math-tex"><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span></span>&nbsp;первый магазин&nbsp;<span class="math-tex"><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span></span>&nbsp;второй магазин&nbsp;<span class="math-tex"><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span></span>&nbsp;дом.</li>
+	<li>Во втором примере (Тест&nbsp;№2)&nbsp;одним из оптимальных маршрутов является: дом&nbsp;<span class="math-tex"><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span></span>&nbsp;первый магазин&nbsp;<span class="math-tex"><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span></span>&nbsp;дом&nbsp;<span class="math-tex"><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span></span>&nbsp;второй магазин&nbsp;<span class="math-tex"><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span></span>&nbsp;дом.</li>
+</ol></span></div>
     `,
     mainMethodTemplate: `
 using System;
 
-public class MainClass
+public class Program
 {
-    public static void Main()
+    static void Main(string[] args)
     {
-        Calculator calc = new Calculator();
-        // Демонстрация работы калькулятора
         ###
     }
 }
-
-public class Calculator
-{
-    public int Add(int a, int b){
-        return a+b;
-    }
-	
-    public int Subtract(int a, int b){
-        return a-b;
-    }
-	
-    public int Multiply(int a, int b){
-        return a*b;
-    }
-	
-    public int Divide(int a, int b){
-        return a/b;
-    }
-
-    public string Concat(string a, string b){
-        return a+b;
-    }
-
-    public string SafeConcat(string? a, string? b){
-        return a??"null"+b??"null";
-    }
-
-    public string Tst(string? a, string? b){
-        return "abc";
-    }
-        
-}
     `,
-    initialCode: `Console.WriteLine("Сумма: " + calc.Add(5, 3));
-Console.WriteLine("Разность: " + calc.Subtract(5, 3));
-Console.WriteLine("Произведение: " + calc.Multiply(5, 3));
-Console.WriteLine("Деление: " + calc.Divide(5, 3));`
+    initialCode: `
+        var a = long.Parse(Console.ReadLine());
+        var b = long.Parse(Console.ReadLine());
+        var c = long.Parse(Console.ReadLine());
+        var sum = a+b+c;
+        sum=100;
+        Console.WriteLine(sum);`
   };
 
   setAssignment(mockAssignment);

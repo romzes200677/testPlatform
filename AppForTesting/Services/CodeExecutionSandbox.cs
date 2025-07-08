@@ -1,6 +1,6 @@
-using CSharpTestApp.Models;
 using System.Reflection;
 using System.Runtime.Loader;
+using CSharpTestApp.Models;
 
 namespace CSharpTestApp.Services;
 
@@ -23,7 +23,7 @@ public class CodeExecutionSandbox : IDisposable
             var assembly = _loadContext.LoadFromStream(stream);
             
             var executor = new RemoteExecutor();
-            return executor.ExecuteTestsInIsolation(assembly, tests); // Передаем Assembly вместо byte[]
+            return executor.ExecuteTestsInIsolation(assembly, tests);
         }
         catch (Exception ex)
         {
@@ -39,81 +39,72 @@ public class CodeExecutionSandbox : IDisposable
 
     public class RemoteExecutor
     {
-        public TestRunResult ExecuteTestsInIsolation(Assembly assembly, List<UnitTest> tests) // Измененный параметр
+        public TestRunResult ExecuteTestsInIsolation(Assembly assembly, List<UnitTest> tests)
         {
             var result = new TestRunResult();
-            var outputCapture = new StringWriter();
+            var originalOut = Console.Out;
+            var originalIn = Console.In;
 
             try
             {
-                // Перенаправляем консольный вывод
-                var originalOut = Console.Out;
-                Console.SetOut(outputCapture);
-
-                // Находим и запускаем метод Main
                 var mainMethod = assembly.EntryPoint;
-                if (mainMethod != null)
+                if (mainMethod == null)
                 {
-                    object[] parameters = mainMethod.GetParameters().Length > 0 
-                        ? new object[] { Array.Empty<string>() } 
-                        : null;
-                    
-                    mainMethod.Invoke(null, parameters);
+                    result.CompilationError = "Entry point not found";
+                    return result;
                 }
 
-                // Выполняем тесты
-                ExecuteTests(assembly, tests, result);
-                
-                // Восстанавливаем вывод
-                Console.SetOut(originalOut);
-                result.Output = outputCapture.ToString();
+                foreach (var test in tests)
+                {
+                    try
+                    {
+                        string combinedInput = string.Join(Environment.NewLine, test.Inputs);
+                        using (var inputReader = new StringReader(combinedInput))
+                        using (var outputWriter = new StringWriter())
+                        {
+                            Console.SetIn(inputReader);
+                            Console.SetOut(outputWriter);
+
+                            object[] parameters = mainMethod.GetParameters().Length > 0 
+                                ? new object[] { Array.Empty<string>() } 
+                                : null;
+                            
+                            mainMethod.Invoke(null, parameters);
+                            
+                            var actualOutput = outputWriter.ToString().Trim();
+                            test.ActualOutput = actualOutput;
+
+                            if (actualOutput != test.ExpectedOutput.Trim())
+                            {
+                                result.FailedTests.Add(test);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        test.ActualOutput = $"Runtime error: {ex.InnerException?.Message ?? ex.Message}";
+                        result.FailedTests.Add(test);
+                    }
+                    finally
+                    {
+                        Console.SetOut(originalOut);
+                        Console.SetIn(originalIn);
+                    }
+                }
+
+                result.IsSuccess = !result.FailedTests.Any();
             }
             catch (Exception ex)
             {
-                result.CompilationError = $"Runtime error: {ex.InnerException?.Message ?? ex.Message}";
+                result.CompilationError = $"Execution failed: {ex.Message}";
+            }
+            finally
+            {
+                Console.SetOut(originalOut);
+                Console.SetIn(originalIn);
             }
             
             return result;
-        }
-
-        private void ExecuteTests(Assembly assembly, List<UnitTest> tests, TestRunResult result)
-        {
-            foreach (var test in tests)
-            {
-                try
-                {
-                    // Находим тестируемый класс и метод
-                    var targetType = assembly.GetTypes()
-                        .FirstOrDefault(t => t.GetMethod(test.MethodName) != null);
-                    
-                    if (targetType == null)
-                    {
-                        test.ErrorMessage = $"Method {test.MethodName} not found";
-                        result.FailedTests.Add(test);
-                        continue;
-                    }
-                    
-                    // Создаем экземпляр и вызываем метод
-                    var instance = Activator.CreateInstance(targetType);
-                    var method = targetType.GetMethod(test.MethodName);
-                    var actualResult = method.Invoke(instance, test.Parameters);
-                    
-                    // Проверяем результат
-                    test.IsSuccess = test.IsPassing(actualResult);
-                    if (!test.IsSuccess)
-                    {
-                        test.ActualResult = actualResult?.ToString();
-                        result.FailedTests.Add(test);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    test.ErrorMessage = ex.InnerException?.Message ?? ex.Message;
-                    result.FailedTests.Add(test);
-                }
-            }
-
-            result.IsSuccess = !result.FailedTests.Any();
         }
     }
 }
