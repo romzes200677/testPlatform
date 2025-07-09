@@ -45,21 +45,33 @@ namespace CSharpTestApp.Controllers
         [HttpPost("execute")]
         public async Task<ActionResult<CodeExecutionResponse>> ExecuteCode([FromBody] CodeExecutionRequest request)
         {
-            var tests = _testService.GenerateArthurTests();
+            List<UnitTest> tests = new List<UnitTest>();
+            if (request.AssignmentId == "math-1")
+            {
+                tests = _testService.GenerateArthurTests();
+            }else if (request.AssignmentId == "math-2")
+            {
+                tests = await _testService.GetTests();
+            }
+            
             string fullCode = request.MainMethodTemplate.Replace("###", request.UserCode);
 
             var testResult = _codeTester.RunTests(fullCode, tests);
-
+            var incorrectModels = testResult.FailedTests.OrderBy(x=>x.Inputs).FirstOrDefault();
+            var lstErrors = incorrectModels is null ? new List<TestResultDto>() : new List<TestResultDto>()
+            {
+                new()
+                {
+                    TestName = incorrectModels.Name,
+                    Inputs = incorrectModels.Inputs, // Используем список строк
+                    Expected = incorrectModels.ExpectedOutput,
+                    Actual = incorrectModels.ActualOutput
+                }
+            };
             return new CodeExecutionResponse
             {
                 IsSuccess = testResult.IsSuccess,
-                FailedTests = testResult.FailedTests.Select(t => new TestResultDto
-                {
-                    TestName = t.Name,
-                    Inputs = t.Inputs, // Используем список строк
-                    Expected = t.ExpectedOutput,
-                    Actual = t.ActualOutput
-                }).ToList(),
+                FailedTests = lstErrors,
                 CompilationError = testResult.CompilationError,
                 Output = testResult.Output,
                 ExecutionTime = testResult.ExecutionTime.TotalMilliseconds

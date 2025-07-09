@@ -882,7 +882,7 @@ else
             };
         }
 
-        public async Task<List<UnitTest>> GetTests(string userId)
+        public async Task<List<UnitTest>> GetTests()
         {
             return await Task.FromResult(new List<UnitTest>
             {
