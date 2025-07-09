@@ -52,14 +52,17 @@ namespace CSharpTestApp.Controllers
 
             return new CodeExecutionResponse
             {
-                // ... остальные свойства ...
+                IsSuccess = testResult.IsSuccess,
                 FailedTests = testResult.FailedTests.Select(t => new TestResultDto
                 {
                     TestName = t.Name,
                     Inputs = t.Inputs, // Используем список строк
                     Expected = t.ExpectedOutput,
                     Actual = t.ActualOutput
-                }).ToList()
+                }).ToList(),
+                CompilationError = testResult.CompilationError,
+                Output = testResult.Output,
+                ExecutionTime = testResult.ExecutionTime.TotalMilliseconds
             };
         }
     }

@@ -819,29 +819,29 @@ else
         {
             return new List<UnitTest>
             {
-                // new UnitTest
-                // {
-                //     Name = "Sample Input 1",
-                //     Inputs = new List<string> { "65421" }, // Используем список
-                //     ExpectedOutput = "7"
-                // },
-                // new UnitTest
-                // {
-                //     Name = "Sample Input 2",
-                //     Inputs = new List<string> { "25" }, // Используем список
-                //     ExpectedOutput = "7"
-                // },
-                // new UnitTest
-                // {
-                //     Name = "Sample Input 3",
-                //     Inputs = new List<string> { "951" }, // Используем список
-                //     ExpectedOutput = "15"
-                // },
                 new UnitTest
                 {
-                    Name = "Multi Input Test",
-                    Inputs = new List<string> { "1", "2", "3" },
-                    ExpectedOutput = "6"
+                    Name = "Sample Input 1",
+                    Inputs = new List<string> { "10","10","100" }, // Используем список
+                    ExpectedOutput = "40"
+                },
+                new UnitTest
+                {
+                    Name = "Sample Input 2",
+                    Inputs = new List<string> { "10","10","5" }, // Используем список
+                    ExpectedOutput = "25"
+                },
+                new UnitTest
+                {
+                    Name = "Sample Input 3",
+                    Inputs = new List<string> { "5","100","1" }, // Используем список
+                    ExpectedOutput = "12"
+                },
+                new UnitTest
+                {
+                    Name = "Sample Input 4",
+                    Inputs = new List<string> { "100", "5", "1" },
+                    ExpectedOutput = "12"
                 }
                 
             };

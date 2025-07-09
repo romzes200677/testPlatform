@@ -96,12 +96,22 @@ public class Program
 }
     `,
     initialCode: `
-        var a = long.Parse(Console.ReadLine());
-        var b = long.Parse(Console.ReadLine());
-        var c = long.Parse(Console.ReadLine());
-        var sum = a+b+c;
-        sum=100;
-        Console.WriteLine(sum);`
+         var d1 = Int64.Parse(Console.ReadLine());
+        var d2 = Int64.Parse(Console.ReadLine());
+        var d3 = Int64.Parse(Console.ReadLine());
+        if (d1 >= 1 && d2 >= 1 && d3 >= 1 && d1 <= 100000000 && d2 <= 100000000 && d3 <= 100000000)
+        {
+            var len1 = 2 * d1 + 2 * d2;
+            var len2 = d1 + d2 + d3;
+            var len3 = 2*d1 + 02*d3;
+            var len4 = 2*d2 + 02*d3;
+
+            var min = len1;
+            if(len2 < min) min = len2;
+            if(len3 < min) min = len3;
+            if(len4 < min) min = len4;
+            Console.WriteLine(min);
+        }`
   };
 
   setAssignment(mockAssignment);
@@ -129,6 +139,7 @@ public class Program
   }, [assignmentId]); */
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const handleExecuteCode = async () => {
+    console.log("Sending user code:", userCode); // Отладочная информация
     if (!assignment) return;
     
     setIsExecuting(true);
@@ -222,7 +233,10 @@ public class Program
                         {test.errorMessage ? (
                           <div className={styles.testError}>Ошибка: {test.errorMessage}</div>
                         ) : (
-                          <>
+                          <> <div className={styles.testRow}>
+                              <span>Входные параметры</span> 
+                              <span className={styles.testValue}>{test.inputs.join(',') || 'null'}</span>
+                            </div>
                             <div className={styles.testRow}>
                               <span>Ожидалось:</span> 
                               <span className={styles.testValue}>{test.expected || 'null'}</span>

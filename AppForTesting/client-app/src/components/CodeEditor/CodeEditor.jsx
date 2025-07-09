@@ -5,10 +5,9 @@ import styles from './CodeEditor.module.css';
 const CodeEditor = ({ template, userCode, onCodeChange, language = 'csharp' }) => {
   const editorRef = useRef(null);
   const editorInstance = useRef(null);
-  const placeholder = '###';
   
   // Формируем полный код с заменой плейсхолдера
-  const fullCode = template.replace(placeholder, userCode);
+  const fullCode = template.replace('###', userCode);
 
   useEffect(() => {
     if (editorRef.current) {
@@ -25,34 +24,51 @@ const CodeEditor = ({ template, userCode, onCodeChange, language = 'csharp' }) =
         readOnly: false,
       });
       
-      editorInstance.current.onDidChangeModelContent(() => {
+      // Обработчик изменений кода
+      const changeListener = editorInstance.current.onDidChangeModelContent(() => {
         const currentValue = editorInstance.current.getValue();
         
-        // Извлекаем пользовательский код между плейсхолдерами
-        const startIndex = currentValue.indexOf(placeholder);
-        if (startIndex !== -1) {
-          const endIndex = currentValue.indexOf(placeholder, startIndex + placeholder.length);
-          if (endIndex !== -1) {
-            const newUserCode = currentValue.substring(
-              startIndex + placeholder.length,
-              endIndex
-            );
+        // Извлекаем пользовательский код после плейсхолдера
+        const placeholderIndex = template.indexOf('###');
+        if (placeholderIndex !== -1) {
+          const beforePlaceholder = template.substring(0, placeholderIndex);
+          const afterPlaceholder = template.substring(placeholderIndex + 3);
+          
+          const startIndex = currentValue.indexOf(beforePlaceholder) + beforePlaceholder.length;
+          const endIndex = currentValue.indexOf(afterPlaceholder, startIndex);
+          
+          if (startIndex !== -1 && endIndex !== -1) {
+            const newUserCode = currentValue.substring(startIndex, endIndex);
             onCodeChange(newUserCode);
           }
         }
       });
-    }
 
-    return () => {
-      if (editorInstance.current) {
-        editorInstance.current.dispose();
-      }
-    };
+      // Сохраняем ссылку на листенер для очистки
+      return () => {
+        changeListener.dispose();
+        if (editorInstance.current) {
+          editorInstance.current.dispose();
+        }
+      };
+    }
   }, [language]);
 
   useEffect(() => {
-    if (editorInstance.current && fullCode !== editorInstance.current.getValue()) {
-      editorInstance.current.setValue(fullCode);
+    if (editorInstance.current) {
+      const currentValue = editorInstance.current.getValue();
+      if (fullCode !== currentValue) {
+        // Сохраняем позицию курсора
+        const position = editorInstance.current.getPosition();
+        
+        editorInstance.current.setValue(fullCode);
+        
+        // Восстанавливаем позицию курсора
+        if (position) {
+          editorInstance.current.setPosition(position);
+          editorInstance.current.revealPositionInCenter(position);
+        }
+      }
     }
   }, [fullCode]);
 
