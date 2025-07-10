@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="client-app\src\components\Navbar\" />
     <Folder Include="Data\" />
   </ItemGroup>
 

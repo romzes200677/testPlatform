@@ -103,36 +103,42 @@ export default function TestPage() {
     };
 
     return (
-        <div className={styles.container}>
-            <Timer
-                timeLeft={timeLeft}
-                onTimeUp={handleTimeUp}
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <Timer
+          timeLeft={timeLeft}
+          onTimeUp={handleTimeUp}
+        />
+        <Link to="/assignment/math-1" className={styles.taskLink}>
+          Перейти к решению задач
+        </Link>
+      </div>
+
+      {questions.length > 0 ? (
+        <div className={styles.questionsGrid}>
+          {questions.map(question => (
+            <QuestionCard
+              key={`question_${question.id}`}
+              question={question}
+              onSelect={handleAnswerSelect}
+              selectedAnswer={answers[question.id]}
             />
-            <Link to="/assignment/math-1">Перейти к решению задач</Link>
-
-            {questions.length > 0 ? (
-                questions.map(question => (
-                    <QuestionCard
-                        key={`question_${question.id}`}
-                        question={question}
-                        onSelect={handleAnswerSelect}
-                        selectedAnswer={answers[question.id]}
-                    />
-                ))
-            ) : (
-                <div className={styles.loading}>
-                    <div className={styles.spinner}></div>
-                    <p>Загрузка вопросов...</p>
-                </div>
-            )}
-
-            <button
-                onClick={handleSubmit}
-                disabled={timeLeft === 0}
-                className={styles.submitButton}
-            >
-                {timeLeft === 0 ? 'Время вышло!' : 'Завершить тест'}
-            </button>
+          ))}
         </div>
-    );
+      ) : (
+        <div className={styles.loading}>
+          <div className={styles.spinner}></div>
+          <p>Загрузка вопросов...</p>
+        </div>
+      )}
+
+      <button
+        onClick={handleSubmit}
+        disabled={timeLeft === 0}
+        className={styles.submitButton}
+      >
+        {timeLeft === 0 ? 'Время вышло!' : 'Завершить тест'}
+      </button>
+    </div>
+  );
 }
