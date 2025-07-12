@@ -151,8 +151,7 @@ public class Program
         assignmentId: assignment.id,
         mainMethodTemplate: assignment.mainMethodTemplate,
         userCode: userCode,
-        assignmentText: assignment.description,
-        assignmentId:assignment.id
+        assignmentText: assignment.description
       });
       
       setResults(response.data);
