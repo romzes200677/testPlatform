@@ -1,19 +1,19 @@
-const API_BASE_URL = 'http://localhost:5231/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||'http://localhost:5231/api/test';
 
-export const fetchQuestions = async () => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/test/questions`);
+export const fetchQuestions = async (pageNumber, pageSize) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/questions?PageNumber=${pageNumber}&PageSize=${pageSize}`);
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Ошибка ${response.status}: ${errorText}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error("Ошибка при загрузке вопросов:", error);
-        throw new Error(`Не удалось загрузить вопросы: ${error.message}`);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Ошибка ${response.status}: ${errorText}`);
     }
+
+    return await response.json(); // Return the JSON data instead of setQuestions
+  } catch (error) {
+    console.error('Ошибка при загрузке вопросов:', error);
+    throw error; // Re-throw the error for the component to handle
+  }
 };
 
 export const submitAnswers = async (answers) => {

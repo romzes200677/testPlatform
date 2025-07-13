@@ -1,144 +1,60 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTestContext } from '../../contexts/TestContext';
-import { fetchQuestions, submitAnswers } from '../../services/testService';
-import Timer from '../../components/Timer/Timer';
-import QuestionCard from '../../components/QuestionCard/QuestionCard';
-import styles from './TestPage.module.css'; // Импорт CSS-модуля
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import styles from './TestPage.module.css';
+import Pagination from '../../components/Pagination/Pagination';
+import { fetchQuestions } from '../../services/testService';
 
-export default function TestPage() {
-    const [questions, setQuestions] = useState([]);
-    const [answers, setAnswers] = useState({});
-    const [timeLeft, setTimeLeft] = useState(60 * 60 * 2);
-    const { setTestResult } = useTestContext();
-    const navigate = useNavigate();
+const TestPage = () => {
+  const [questions, setQuestions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const questionsPerPage = 10;
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    // Обработчик истечения времени
-    const handleTimeUp = () => {
-        handleSubmit();
-    };
+  useEffect(() => {
+  const loadQuestions = async () => {
+    try {
+      const data = await fetchQuestions(currentPage, questionsPerPage);
+      setQuestions(data);
+    } catch (error) {
+      console.error('Error loading questions:', error);
+      // Handle error in your component (e.g., show error message)
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    useEffect(() => {
-        const loadQuestions = async () => {
-            try {
-                const data = await fetchQuestions();
+  loadQuestions();
+}, [currentPage, questionsPerPage]);
 
-                // Добавляем временные ID для вопросов без ID
-                const processedQuestions = data.map((q, index) => ({
-                    ...q,
-                    // Если у вопроса нет ID, используем индекс + 1000
-                    Id: q.id || index + 1000
-                }));
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
-                setQuestions(processedQuestions);
-            } catch (error) {
-                console.error("Ошибка загрузки вопросов:", error);
-                alert(`${error.message}\n\nПопробуйте перезагрузить страницу.`);
-                setQuestions([]);
-            }
-        };
+  if (isLoading) {
+    return <div className={styles.loading}>Загрузка...</div>;
+  }
 
-        loadQuestions();
+  if (error) {
+    return <div className={styles.error}>Ошибка: {error}</div>;
+  }
 
-        // Таймер обратного отсчета
-        const timerId = setInterval(() => {
-            setTimeLeft(prev => {
-                if (prev <= 1) {
-                    clearInterval(timerId);
-                    handleTimeUp();
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-
-        return () => clearInterval(timerId);
-    }, []);
-
-   const handleAnswerSelect = (questionId, answerId) => {
-        setAnswers(prev => ({
-            ...prev,
-            [questionId]: Number(answerId) // Приводим к числу
-        }));
-    };
-
-    const handleSubmit = async () => {
-        try {
-            // Преобразуем ответы в нужный формат
-            const userAnswers = Object.entries(answers).map(([qId, aId]) => ({
-                QuestionId: parseInt(qId),
-                SelectedAnswerId: aId
-            }));
-
-            // Отправляем на сервер
-            const result = await submitAnswers(userAnswers);
-
-            if (!result) {
-                throw new Error("Пустой ответ от сервера");
-            }
-
-            // Обрабатываем результат
-            setTestResult({
-                correctAnswers: result.correctAnswers,
-                totalQuestions: result.totalQuestions,
-                incorrectAnswers: result.incorrectAnswers.map(item => ({
-                    Question: {
-                        id: item.question.id,
-                        text: item.question.text,
-                        topic: item.question.topic,
-                        options: item.question.options,
-                        correctAnswerId: item.question.correctAnswerId,
-                        explanation: item.question.explanation
-                    },
-                    SelectedAnswerId: item.selectedAnswerId,
-                }))
-            });
-
-            navigate('/results');
-        } catch (error) {
-            console.error("Ошибка при отправке ответов:", error);
-            alert("Произошла ошибка при обработке результатов. Пожалуйста, попробуйте снова.");
-        }
-    };
-
-    return (
+  return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Timer
-          timeLeft={timeLeft}
-          onTimeUp={handleTimeUp}
-        />
-        <Link to="/assignment/math-1" className={styles.taskLink}>
-          Перейти к решению задач
-        </Link>
+      <div className={styles.questionsContainer}>
+        {questions.items.map((question) => (
+          <div key={question.id} className={styles.question}>
+            <h3>{question.text}</h3>
+            {/* Отображение вариантов ответов */}
+          </div>
+        ))}
       </div>
-
-      {questions.length > 0 ? (
-        <div className={styles.questionsGrid}>
-          {questions.map(question => (
-            <QuestionCard
-              key={`question_${question.id}`}
-              question={question}
-              onSelect={handleAnswerSelect}
-              selectedAnswer={answers[question.id]}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className={styles.loading}>
-          <div className={styles.spinner}></div>
-          <p>Загрузка вопросов...</p>
-        </div>
-      )}
-
-      <button
-        onClick={handleSubmit}
-        disabled={timeLeft === 0}
-        className={styles.submitButton}
-      >
-        {timeLeft === 0 ? 'Время вышло!' : 'Завершить тест'}
-      </button>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={10} // Это должно прийти с сервера
+        onPageChange={handlePageChange}
+      />
     </div>
   );
-}
+};
+
+export default TestPage;
