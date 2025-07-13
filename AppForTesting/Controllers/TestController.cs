@@ -1,5 +1,6 @@
 using CSharpTestApp.Infrastructure;
 using CSharpTestApp.Models;
+using CSharpTestApp.Models.api;
 using Microsoft.AspNetCore.Mvc;
 using CSharpTestApp.Services;
 
@@ -21,10 +22,24 @@ namespace CSharpTestApp.Controllers
         }
 
         [HttpGet("questions")]
-        public IActionResult GetQuestions()
+        public ActionResult<PagedResponse<Question>> GetQuestions([FromQuery] PagingParameters parameters)
         {
             var questions = _testService.GenerateTest();
-            return Ok(questions);
+            var totalCount = questions.Count;
+            var paginatedQuestions = questions
+                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                .Take(parameters.PageSize)
+                .ToList();
+
+            var response = new PagedResponse<Question>
+            {
+                Items = paginatedQuestions,
+                Count = totalCount,
+                PageNumber = parameters.PageNumber,
+                PageSize = parameters.PageSize,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)parameters.PageSize)
+            };
+            return Ok(response);
         }
         
         [HttpGet("decisions")]
