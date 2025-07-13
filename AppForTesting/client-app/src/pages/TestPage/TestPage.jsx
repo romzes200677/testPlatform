@@ -11,47 +11,45 @@ const TestPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-  const loadQuestions = async () => {
-    try {
-      const data = await fetchQuestions(currentPage, questionsPerPage);
-      setQuestions(data);
-    } catch (error) {
-      console.error('Error loading questions:', error);
-      // Handle error in your component (e.g., show error message)
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    const loadQuestions = async () => {
+      try {
+        const data = await fetchQuestions(currentPage, questionsPerPage);
+        setQuestions(data);
+      } catch (error) {
+        console.error('Error loading questions:', error);
+        setError('Failed to load questions');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  loadQuestions();
-}, [currentPage, questionsPerPage]);
+    loadQuestions();
+  }, [currentPage, questionsPerPage]);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  if (isLoading) {
-    return <div className={styles.loading}>Загрузка...</div>;
-  }
-
-  if (error) {
-    return <div className={styles.error}>Ошибка: {error}</div>;
-  }
+  const totalPages = Math.ceil(100 / questionsPerPage); // Пример: общее количество вопросов 100
 
   return (
-    <div className={styles.container}>
-      <div className={styles.questionsContainer}>
-        {questions.items.map((question) => (
-          <div key={question.id} className={styles.question}>
-            <h3>{question.text}</h3>
-            {/* Отображение вариантов ответов */}
-          </div>
-        ))}
-      </div>
+    <div className={styles.testContainer}>
+      <div className={styles.testName}>Questions</div>
+
+      {isLoading ? (
+        <div>Loading questions...</div>
+      ) : error ? (
+        <div className={styles.error}>{error}</div>
+      ) : (
+        <div>
+          {questions.items?.map((question) => (
+            <div key={question.id} className={styles.testRow}>
+              <div className={styles.testValue}>{question.text}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
       <Pagination
         currentPage={currentPage}
-        totalPages={10} // Это должно прийти с сервера
-        onPageChange={handlePageChange}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
       />
     </div>
   );
