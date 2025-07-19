@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './TestPage.module.css';
 import Pagination from '../../components/Pagination/Pagination';
 import { fetchQuestions } from '../../services/testService';
+import QuestionCard from '../../components/QuestionCard/QuestionCard';
 
 const TestPage = () => {
   const [questions, setQuestions] = useState([]);
@@ -9,6 +10,7 @@ const TestPage = () => {
   const questionsPerPage = 10;
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [answers, setAnswers] = useState({});
 
   useEffect(() => {
     const loadQuestions = async () => {
@@ -27,7 +29,15 @@ const TestPage = () => {
   }, [currentPage, questionsPerPage]);
 
   const totalPages = Math.ceil(100 / questionsPerPage); // Пример: общее количество вопросов 100
-
+  const handleAnswerSelect = (questionId, answerId) => {
+        setAnswers(prev => ({
+            ...prev,
+            [questionId]: Number(answerId) // Приводим к числу
+        }));
+    };
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
   return (
     <div className={styles.testContainer}>
       <div className={styles.testName}>Questions</div>
@@ -39,9 +49,12 @@ const TestPage = () => {
       ) : (
         <div>
           {questions.items?.map((question) => (
-            <div key={question.id} className={styles.testRow}>
-              <div className={styles.testValue}>{question.text}</div>
-            </div>
+            <QuestionCard
+              key={`question_${question.id}`}
+              question={question}
+              onSelect={handleAnswerSelect}
+              selectedAnswer={answers[question.id]}
+            />
           ))}
         </div>
       )}
