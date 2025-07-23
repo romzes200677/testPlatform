@@ -7,6 +7,7 @@ const Sidebar = () => {
     { id: 'math', name: 'Математика' },
     { id: 'physics', name: 'Физика' },
     { id: 'programming', name: 'Программирование' },
+    { id: 'math-1', name: 'Решение задач' },
   ];
 
   return (
@@ -16,7 +17,7 @@ const Sidebar = () => {
         {courses.map(course => (
           <li key={course.id}>
             <NavLink 
-              to={`/course/${course.id}`}
+              to={`/assignment/${course.id}`}
               className={({ isActive }) => 
                 isActive ? styles.activeCourse : styles.courseItem
               }

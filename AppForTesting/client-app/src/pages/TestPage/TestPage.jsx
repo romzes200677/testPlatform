@@ -6,6 +6,7 @@ import QuestionCard from '../../components/QuestionCard/QuestionCard';
 import { useTestContext } from '../../contexts/TestContext';
 import Timer from '../../components/Timer/Timer';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const TestPage = () => {
   const [questions, setQuestions] = useState([]);
@@ -113,6 +114,7 @@ const TestPage = () => {
         totalPages={totalPages}
         onPageChange={setCurrentPage}
       />
+      <Link to="/assignment/math-1">Перейти к решению задач</Link>
        <button
                 onClick={handleSubmit}
                 disabled={timeLeft === 0}
