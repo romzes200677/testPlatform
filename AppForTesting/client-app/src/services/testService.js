@@ -18,7 +18,7 @@ export const fetchQuestions = async (pageNumber, pageSize) => {
 
 export const submitAnswers = async (answers) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/test/evaluate`, {
+        const response = await fetch(`${API_BASE_URL}/evaluate`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ export const submitAnswers = async (answers) => {
 
 export const submitDecision = async (answers) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/test/execute`, {
+        const response = await fetch(`${API_BASE_URL}/execute`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

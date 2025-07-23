@@ -1,7 +1,9 @@
 .container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
+  max-width: 70vw;
+  display: flex;
+  flex-direction: column;
+  margin: 0 10vw 50vw;
+  padding: 0 50px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 

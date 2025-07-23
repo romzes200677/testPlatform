@@ -1,7 +1,7 @@
 /* components/Sidebar/Sidebar.module.css */
 .sidebar {
   width: 250px;
-  background-color: #f8f9fa;
+  background-color:var(--bgc);
   padding: 20px;
   height: calc(100vh - 70px);
   position: fixed;
