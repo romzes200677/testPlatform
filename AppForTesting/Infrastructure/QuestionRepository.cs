@@ -2,12 +2,12 @@ using CSharpTestApp.Models;
 
 namespace CSharpTestApp.Infrastructure;
 
-public interface ITestRepository
+public interface IQuestinRepository
 {
     public Task<List<UnitTest>> GetTestsForAssignment(string assignmentId);
 }
 
-public class InMemoryTestRepository : ITestRepository
+public class InMemoryQuestinRepository : IQuestinRepository
 {
     private readonly Dictionary<string, List<UnitTest>> _assignments = new()
     {

@@ -43,7 +43,7 @@ const TestPage = () => {
   const handleAnswerSelect = (questionId, answerId) => {
         setAnswers(prev => ({
             ...prev,
-            [questionId]: Number(answerId) // Приводим к числу
+            [questionId]: [Number(answerId)] // Store as an array
         }));
     };
   const handlePageChange = (pageNumber) => {
@@ -53,9 +53,9 @@ const TestPage = () => {
    const handleSubmit = async () => {
         try {
             // Преобразуем ответы в нужный формат
-            const userAnswers = Object.entries(answers).map(([qId, aId]) => ({
+            const userAnswers = Object.entries(answers).map(([qId, aIds]) => ({
                 QuestionId: parseInt(qId),
-                SelectedAnswerId: aId
+                SelectedOptionIds: aIds
             }));
 
             // Отправляем на сервер

@@ -1,171 +1,122 @@
 using CSharpTestApp.Models;
 
-namespace CSharpTestApp.Services
+namespace CSharpTestApp.Services.Generators
 {
-    public class TestService
+    public interface IQuestionGenerator
     {
-        public List<Question> GenerateTest()
-        {
-            // Реализация генерации вопросов (50 вопросов)
-           return new List<Question>
-{
-    // Раздел 2: Ввод-вывод данных. Переменные (10 вопросов)
-    new Question
-    {
-        Id = 1,
-        Topic = "Ввод-вывод данных",
-        Text = @"Определи  значение переменной c после выполнения следующего фрагмента программы, не используя среду программирования:
+        IEnumerable<Question> GenerateQuestions();
+    }
 
+    public class InputOutputQuestionGenerator : IQuestionGenerator
+    {
+        public IEnumerable<Question> GenerateQuestions()
+        {
+            return new List<Question>
+            {
+                new Question
+                {
+                    Id = 1,
+                    Text = "Какой метод используется для вывода данных в консоль?",
+                    Topic = "Ввод/вывод данных",
+                    Complexity = 1,
+                    QuestionType = "SingleChoice",
+                    Options = new List<AnswerOption> 
+                    {
+                        new AnswerOption { Id = 1, Text = "Console.WriteLine()" },
+                        new AnswerOption { Id = 2, Text = "Console.ReadLine()" },
+                        new AnswerOption { Id = 3, Text = "Console.Read()" },
+                        new AnswerOption { Id = 4, Text = "Console.Write()" }
+                    },
+                    CorrectAnswers = new List<int> { 1 },
+                    Explanation = "Console.WriteLine() используется для вывода данных в консоль с последующим переходом на новую строку."
+                },
+                new Question
+                {
+                    Id = 2,
+                    Text = "Какой метод используется для ввода данных с консоли?",
+                    Topic = "Ввод/вывод данных",
+                    Complexity = 1,
+                    QuestionType = "SingleChoice",
+                    Options = new List<AnswerOption> 
+                    {
+                        new AnswerOption { Id = 1, Text = "Console.WriteLine()" },
+                        new AnswerOption { Id = 2, Text = "Console.ReadLine()" },
+                        new AnswerOption { Id = 3, Text = "Console.Read()" },
+                        new AnswerOption { Id = 4, Text = "Console.Write()" }
+                    },
+                    CorrectAnswers = new List<int> { 2 },
+                    Explanation = "Console.ReadLine() используется для ввода строки данных с консоли."
+                }
+            };
+        }
+    }
 
-```
-        int m = 67; 
-        m = m + 13; 
-        int n = m / 4 - m / 2; 
-        int c = m - n;
-```
-",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "60" },
-            new AnswerOption { Id = 2, Text = "100" },
-            new AnswerOption { Id = 3, Text = "-60" },
-            new AnswerOption { Id = 4, Text = "32" }
-        },
-        CorrectAnswerId = 2,
-        Explanation = "Необходимо учитывать приоритет выполнения операций и целочисленное деление"
-    },
-    new Question
+    public class VariableDeclarationQuestionGenerator : IQuestionGenerator
     {
-        Id = 2,
-        Topic = "Переменные",
-        Text = "Как объявить переменную целого типа?",
-        Options = new List<AnswerOption>
+        public IEnumerable<Question> GenerateQuestions()
         {
-            new AnswerOption { Id = 1, Text = "var x = 10;" },
-            new AnswerOption { Id = 2, Text = "int x;" },
-            new AnswerOption { Id = 3, Text = "string x;" },
-            new AnswerOption { Id = 4, Text = "x = int;" }
-        },
-        CorrectAnswerId = 2,
-        Explanation = "Правильный синтаксис: <тип> <имя_переменной>;"
-    },
-    new Question
+            return new List<Question>
+            {
+                new Question
+                {
+                    Id = 3,
+                    Text = "Как правильно объявить целочисленную переменную с именем 'age' и значением 25?",
+                    Topic = "Переменные и типы данных",
+                    Complexity = 1,
+                    QuestionType = "SingleChoice",
+                    Options = new List<AnswerOption> 
+                    {
+                        new AnswerOption { Id = 1, Text = "int age = 25;" },
+                        new AnswerOption { Id = 2, Text = "var age = 25.0;" },
+                        new AnswerOption { Id = 3, Text = "string age = \"25\";" },
+                        new AnswerOption { Id = 4, Text = "age = 25;" }
+                    },
+                    CorrectAnswers = new List<int> { 1 },
+                    Explanation = "Для объявления целочисленной переменной используется ключевое слово 'int'."
+                },
+                new Question
+                {
+                    Id = 4,
+                    Text = "Как объявить переменную с плавающей точкой?",
+                    Topic = "Переменные и типы данных",
+                    Complexity = 1,
+                    QuestionType = "SingleChoice",
+                    Options = new List<AnswerOption> 
+                    {
+                        new AnswerOption { Id = 1, Text = "float price = 10.99f;" },
+                        new AnswerOption { Id = 2, Text = "var price = 10.99;" },
+                        new AnswerOption { Id = 3, Text = "double price = 10.99;" },
+                        new AnswerOption { Id = 4, Text = "decimal price = 10.99m;" }
+                    },
+                    CorrectAnswers = new List<int> { 1, 3, 4 },
+                    Explanation = "В C# есть несколько типов для работы с числами с плавающей точкой: float, double и decimal."
+                },
+                  new Question
+                {
+                    Id = 10,
+                    Topic = "Переменные",
+                    Text = "Какое значение получит переменная: int x = 10 / 4;?",
+                    Options = new List<AnswerOption>
+                    {
+                        new AnswerOption { Id = 1, Text = "2" },
+                        new AnswerOption { Id = 2, Text = "2.5" },
+                        new AnswerOption { Id = 3, Text = "3" },
+                        new AnswerOption { Id = 4, Text = "Ошибка компиляции" }
+                    },
+                    CorrectAnswers = new List<int> {1},
+                    Explanation = "Целочисленное деление отбрасывает дробную часть"
+                }   
+            };
+        }
+    }
+    
+    public class ConditionQuestionGenerator : IQuestionGenerator
     {
-        Id = 3,
-        Topic = "Ввод данных",
-        Text = "Как прочитать целое число из консоли?",
-        Options = new List<AnswerOption>
+        public IEnumerable<Question> GenerateQuestions()
         {
-            new AnswerOption { Id = 1, Text = "Console.GetNumber()" },
-            new AnswerOption { Id = 2, Text = "int.Parse(Console.ReadLine())" },
-            new AnswerOption { Id = 3, Text = "Console.ReadInteger()" },
-            new AnswerOption { Id = 4, Text = "Convert.ToInteger(Console.Read())" },
-            new AnswerOption { Id = 5, Text = "Convert.ToInt32(Console.ReadLine())" },
-        },
-        CorrectAnswerId = 2
-    },
-    new Question
-    {
-        Id = 4,
-        Topic = "Вещественные числа",
-        Text = "Какой тип используется для чисел с плавающей точкой двойной точности?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "float" },
-            new AnswerOption { Id = 2, Text = "decimal" },
-            new AnswerOption { Id = 3, Text = "double" },
-            new AnswerOption { Id = 4, Text = "real" }
-        },
-        CorrectAnswerId = 3,
-        Explanation = "double - 64-битное число с плавающей точкой"
-    },
-    new Question
-    {
-        Id = 5,
-        Topic = "Целые числа",
-        Text = "Какой диапазон значений у типа int?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "0 до 4294967295" },
-            new AnswerOption { Id = 2, Text = "-32768 до 32767" },
-            new AnswerOption { Id = 3, Text = "-2147483648 до 2147483647" },
-            new AnswerOption { Id = 4, Text = "0 до 65535" }
-        },
-        CorrectAnswerId = 3
-    },
-    new Question
-    {
-        Id = 6,
-        Topic = "Ввод данных",
-        Text = "Что вернет Console.ReadLine() при вводе '123'?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "Число 123" },
-            new AnswerOption { Id = 2, Text = "Символ '1'" },
-            new AnswerOption { Id = 3, Text = "Строку \"123\"" },
-            new AnswerOption { Id = 4, Text = "Массив char" }
-        },
-        CorrectAnswerId = 3
-    },
-    new Question
-    {
-        Id = 7,
-        Topic = "Вещественные числа",
-        Text = "Как правильно объявить переменную типа float?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "float x = 5.5;" },
-            new AnswerOption { Id = 2, Text = "float x = 5.5f;" },
-            new AnswerOption { Id = 3, Text = "float x = 5.5d;" },
-            new AnswerOption { Id = 4, Text = "float x = 5;" }
-        },
-        CorrectAnswerId = 2,
-        Explanation = "Суффикс f указывает литерал типа float"
-    },
-    new Question
-    {
-        Id = 8,
-        Topic = "Переменные",
-        Text = "Что делает оператор '%'?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "Деление" },
-            new AnswerOption { Id = 2, Text = "Умножение" },
-            new AnswerOption { Id = 3, Text = "Возведение в степень" },
-            new AnswerOption { Id = 4, Text = "Остаток от деления" }
-        },
-        CorrectAnswerId = 4
-    },
-    new Question
-    {
-        Id = 9,
-        Topic = "Вывод данных",
-        Text = "Как вывести число 5.0 как целое значение, используя оператор явного приведения типов (не вызывая методы)??",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "Console.WriteLine((int)5.0);" },
-            new AnswerOption { Id = 2, Text = "Console.WriteLine(Convert.ToInt32(5.0));" },
-            new AnswerOption { Id = 3, Text = "Console.WriteLine(5.0.ToString(\"0\"));" }
-        },
-        CorrectAnswerId = 1 // Только вариант 1 использует явное приведение
-    },
-    new Question
-    {
-        Id = 10,
-        Topic = "Переменные",
-        Text = "Какое значение получит переменная: int x = 10 / 4;?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "2" },
-            new AnswerOption { Id = 2, Text = "2.5" },
-            new AnswerOption { Id = 3, Text = "3" },
-            new AnswerOption { Id = 4, Text = "Ошибка компиляции" }
-        },
-        CorrectAnswerId = 1,
-        Explanation = "Целочисленное деление отбрасывает дробную часть"
-    },
-
-    // Раздел 3: Условный оператор (8 вопросов)
+            return new List<Question>
+            {
+               // Раздел 3: Условный оператор (8 вопросов)
     new Question
     {
         Id = 11,
@@ -178,7 +129,8 @@ namespace CSharpTestApp.Services
             new AnswerOption { Id = 3, Text = "a > 5 AND a < 10" },
             new AnswerOption { Id = 4, Text = "5 < a < 10" }
         },
-        CorrectAnswerId = 1
+        CorrectAnswers = new List<int> { 1},
+        Explanation = "Целочисленное деление отбрасывает дробную часть"
     },
     new Question
     {
@@ -201,7 +153,7 @@ else
             new AnswerOption { Id = 3, Text = "Когда a >= 3 и a <= 5" },
             new AnswerOption { Id = 4, Text = "Никогда" }
         },
-        CorrectAnswerId = 3
+        CorrectAnswers = new List<int> { 3}
     },
     new Question
     {
@@ -215,7 +167,7 @@ else
             new AnswerOption { Id = 3, Text = "Ошибку" },
             new AnswerOption { Id = 4, Text = "null" }
         },
-        CorrectAnswerId = 1
+        CorrectAnswers = new List<int> { 1}
     },
     new Question
     {
@@ -229,7 +181,7 @@ else
             new AnswerOption { Id = 3, Text = "y = switch(x){case >0:1; default:0};" },
             new AnswerOption { Id = 4, Text = "y = (x>0).ToInt();" }
         },
-        CorrectAnswerId = 2
+        CorrectAnswers = new List<int> { 2}
     },
     new Question
     {
@@ -243,7 +195,7 @@ else
             new AnswerOption { Id = 3, Text = "Любое количество" },
             new AnswerOption { Id = 4, Text = "Не более трех" }
         },
-        CorrectAnswerId = 3
+        CorrectAnswers = new List<int> { 3}
     },
     new Question
     {
@@ -257,7 +209,7 @@ else
             new AnswerOption { Id = 3, Text = "||" },
             new AnswerOption { Id = 4, Text = "!!" }
         },
-        CorrectAnswerId = 3
+        CorrectAnswers = new List<int> { 3}
     },
     new Question
     {
@@ -271,7 +223,7 @@ else
             new AnswerOption { Id = 3, Text = "Обработка исключений" },
             new AnswerOption { Id = 4, Text = "Объявление переменных" }
         },
-        CorrectAnswerId = 2
+        CorrectAnswers = new List<int> { 2}
     },
     new Question
     {
@@ -292,10 +244,20 @@ else
             new AnswerOption { Id = 3, Text = "AB" },
             new AnswerOption { Id = 4, Text = "Ничего" }
         },
-        CorrectAnswerId = 2
-    },
+        CorrectAnswers = new List<int> { 2}
+    }
 
-    // Раздел 4: Операторы цикла (12 вопросов)
+            };
+        }
+    }
+    
+     public class LoopQuestionGenerator : IQuestionGenerator
+    {
+        public IEnumerable<Question> GenerateQuestions()
+        {
+            return new List<Question>
+            {
+                 // Раздел 4: Операторы цикла (12 вопросов)
     new Question
     {
         Id = 19,
@@ -308,7 +270,7 @@ else
             new AnswerOption { Id = 3, Text = "6" },
             new AnswerOption { Id = 4, Text = "Бесконечно" }
         },
-        CorrectAnswerId = 2
+        CorrectAnswers = new List<int> { 2}
     },
     new Question
     {
@@ -322,7 +284,7 @@ else
             new AnswerOption { Id = 3, Text = "do-while" },
             new AnswerOption { Id = 4, Text = "foreach" }
         },
-        CorrectAnswerId = 3
+        CorrectAnswers = new List<int> { 3}
     },
     new Question
     {
@@ -336,7 +298,7 @@ else
             new AnswerOption { Id = 3, Text = "Завершает цикл" },
             new AnswerOption { Id = 4, Text = "Перезапускает цикл" }
         },
-        CorrectAnswerId = 3
+        CorrectAnswers = new List<int> { 3}
     },
     new Question
     {
@@ -354,7 +316,7 @@ else
             new AnswerOption { Id = 3, Text = "3" },
             new AnswerOption { Id = 4, Text = "2" }
         },
-        CorrectAnswerId = 2,
+        CorrectAnswers = new List<int> { 2},
         Explanation = "3 * 2 = 6 итераций"
     },
     new Question
@@ -369,7 +331,7 @@ else
             new AnswerOption { Id = 3, Text = "int i=1; while(i<3) Console.WriteLine(i);" },
             new AnswerOption { Id = 4, Text = "int i=0; do Console.WriteLine(++i); while(i<3);" }
         },
-        CorrectAnswerId = 2
+        CorrectAnswers = new List<int> { 2}
     },
     new Question
     {
@@ -383,7 +345,7 @@ else
             new AnswerOption { Id = 3, Text = "Пропускает текущую итерацию" },
             new AnswerOption { Id = 4, Text = "Возобновляет работу цикла" }
         },
-        CorrectAnswerId = 3
+        CorrectAnswers = new List<int> { 3}
     },
     new Question
     {
@@ -397,7 +359,7 @@ else
             new AnswerOption { Id = 3, Text = "Инкремент" },
             new AnswerOption { Id = 4, Text = "Все элементы опциональны" }
         },
-        CorrectAnswerId = 4,
+        CorrectAnswers = new List<int> { 4},
         Explanation = "Можно написать: for(;;) - бесконечный цикл"
     },
     new Question
@@ -412,7 +374,7 @@ else
             new AnswerOption { Id = 3, Text = "Перебрать элементы циклом" },
             new AnswerOption { Id = 4, Text = "Варианты 2 и 3" }
         },
-        CorrectAnswerId = 4
+        CorrectAnswers = new List<int> { 4}
     },
     new Question
     {
@@ -426,7 +388,7 @@ else
             new AnswerOption { Id = 3, Text = "Добавить sleep между итерациями" },
             new AnswerOption { Id = 4, Text = "Варианты 1 и 2" } // Правильный ответ
         },
-        CorrectAnswerId = 4,
+        CorrectAnswers = new List<int> { 4},
         Explanation = "Sleep только приостанавливает цикл, но не обеспечивает выход. Для выхода нужно break или изменение условия."
     },
     new Question
@@ -441,7 +403,7 @@ else
             new AnswerOption { Id = 3, Text = "for (int i=10; i==1; i-)" },
             new AnswerOption { Id = 4, Text = "for (int i=10; i<=1; i++)" }
         },
-        CorrectAnswerId = 2
+        CorrectAnswers = new List<int> { 2}
     },
     new Question
     {
@@ -459,7 +421,7 @@ else
             new AnswerOption { Id = 3, Text = "121" },
             new AnswerOption { Id = 4, Text = "11212" }
         },
-        CorrectAnswerId = 2
+        CorrectAnswers = new List<int> { 2}
     },
     new Question
     {
@@ -474,295 +436,8 @@ else
             new AnswerOption { Id = 4, Text = "Только переменные, объявленные до цикла" },
             new AnswerOption { Id = 5, Text = "Варианты 1 и 2" }
         },
-        CorrectAnswerId = 4, // Только переменные ДО цикла
+        CorrectAnswers = new List<int> { 4}, // Только переменные ДО цикла
         Explanation = "Переменные в заголовке цикла (i) и внутри его тела уничтожаются после выполнения. Сохраняются только переменные, объявленные до цикла."
-    },
-
-    // Раздел 5: Строки и символы (5 вопросов)
-    new Question
-    {
-        Id = 31,
-        Topic = "Символы",
-        Text = "Какой тип используется для одиночного символа?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "string" },
-            new AnswerOption { Id = 2, Text = "char" },
-            new AnswerOption { Id = 3, Text = "symbol" },
-            new AnswerOption { Id = 4, Text = "letter" }
-        },
-        CorrectAnswerId = 2
-    },
-    new Question
-    {
-        Id = 32,
-        Topic = "Строки",
-        Text = "Как получить длину строки?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "str.Length" },
-            new AnswerOption { Id = 2, Text = "str.Count" },
-            new AnswerOption { Id = 3, Text = "str.Size" },
-            new AnswerOption { Id = 4, Text = "len(str)" }
-        },
-        CorrectAnswerId = 1
-    },
-    new Question
-    {
-        Id = 33,
-        Topic = "Строки",
-        Text = "Как объединить две строки?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "str1 + str2" },
-            new AnswerOption { Id = 2, Text = "str1.Concat(str2)" },
-            new AnswerOption { Id = 3, Text = "String.Join(\"\", str1, str2)" },
-            new AnswerOption { Id = 4, Text = "Любой вариант" }
-        },
-        CorrectAnswerId = 4
-    },
-    new Question
-    {
-        Id = 34,
-        Topic = "Символы",
-        Text = "Как преобразовать символ в верхний регистр?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "char.ToUpper(ch)" },
-            new AnswerOption { Id = 2, Text = "ch.ToUpper()" },
-            new AnswerOption { Id = 3, Text = "Char.UpperCase(ch)" },
-            new AnswerOption { Id = 4, Text = "ch.Upper()" }
-        },
-        CorrectAnswerId = 1
-    },
-    new Question
-    {
-        Id = 35,
-        Topic = "Строки",
-        Text = "Что вернет Hello.Substring(1, 3)?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "Hel" },
-            new AnswerOption { Id = 2, Text = "ell" },
-            new AnswerOption { Id = 3, Text = "llo" },
-            new AnswerOption { Id = 4, Text = "lo" }
-        },
-        CorrectAnswerId = 2,
-        Explanation = "Начиная с индекса 1, взять 3 символа: e,l,l"
-    },
-
-    // Раздел 6: Функции (8 вопросов)
-    new Question
-    {
-        Id = 36,
-        Topic = "Функции",
-        Text = "Как объявить функцию без возвращаемого значения?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "void Func()" },
-            new AnswerOption { Id = 2, Text = "function Func()" },
-            new AnswerOption { Id = 3, Text = "def Func()" },
-            new AnswerOption { Id = 4, Text = "null Func()" }
-        },
-        CorrectAnswerId = 1
-    },
-    new Question
-    {
-        Id = 37,
-        Topic = "Параметры функций",
-        Text = "Как передать параметр по ссылке?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "void Func(int param)" },
-            new AnswerOption { Id = 2, Text = "void Func(ref int param)" },
-            new AnswerOption { Id = 3, Text = "void Func(out int param)" },
-            new AnswerOption { Id = 4, Text = "Варианты 2 и 3" }
-        },
-        CorrectAnswerId = 4
-    },
-    new Question
-    {
-        Id = 38,
-        Topic = "Возврат значений",
-        Text = "Как вернуть значение из функции?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "return value;" },
-            new AnswerOption { Id = 2, Text = "break value;" },
-            new AnswerOption { Id = 3, Text = "exit(value);" },
-            new AnswerOption { Id = 4, Text = "result = value;" }
-        },
-        CorrectAnswerId = 1
-    },
-    new Question
-    {
-        Id = 39,
-        Topic = "Виды функций",
-        Text = "Можно ли вызвать функцию до её объявления?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "Да, всегда" },
-            new AnswerOption { Id = 2, Text = "Только в том же классе" },
-            new AnswerOption { Id = 3, Text = "Нет" },
-            new AnswerOption { Id = 4, Text = "Только если функция статическая" }
-        },
-        CorrectAnswerId = 3
-    },
-    new Question
-    {
-        Id = 40,
-        Topic = "Оператор return",
-        Text = "Что происходит после выполнения return?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "Функция продолжает выполнение" },
-            new AnswerOption { Id = 2, Text = "Управление возвращается в вызывающий код" },
-            new AnswerOption { Id = 3, Text = "Программа завершается" },
-            new AnswerOption { Id = 4, Text = "Выполняется следующий оператор" }
-        },
-        CorrectAnswerId = 2
-    },
-    new Question
-    {
-        Id = 41,
-        Topic = "Параметры функций",
-        Text = "Сколько параметров может принимать функция?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "Не более 5" },
-            new AnswerOption { Id = 2, Text = "Не более 10" },
-            new AnswerOption { Id = 3, Text = "Любое количество" },
-            new AnswerOption { Id = 4, Text = "Зависит от типа" }
-        },
-        CorrectAnswerId = 3
-    },
-    new Question
-    {
-        Id = 42,
-        Topic = "Виды функций",
-        Text = "Какой тип функции не возвращает значение?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "int" },
-            new AnswerOption { Id = 2, Text = "string" },
-            new AnswerOption { Id = 3, Text = "void" },
-            new AnswerOption { Id = 4, Text = "bool" }
-        },
-        CorrectAnswerId = 3
-    },
-    new Question
-    {
-        Id = 43,
-        Topic = "Функции",
-        Text = "Что такое параметр функции?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "Локальная переменная" },
-            new AnswerOption { Id = 2, Text = "Глобальная переменная" },
-            new AnswerOption { Id = 3, Text = "Значение, передаваемое в функцию" },
-            new AnswerOption { Id = 4, Text = "Результат работы функции" }
-        },
-        CorrectAnswerId = 3
-    },
-
-    // Раздел 7: Массивы (7 вопросов)
-    new Question
-    {
-        Id = 44,
-        Topic = "Массивы",
-        Text = "Как создать и сразу инициализировать массив из 3 целых чисел?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "int[] arr = {1,2,3};" },
-            new AnswerOption { Id = 2, Text = "int arr = [1,2,3];" },
-            new AnswerOption { Id = 3, Text = "array arr = new array(3);" },
-            new AnswerOption { Id = 4, Text = "int[] arr = new int[3];" }
-        },
-        CorrectAnswerId = 1
-    },
-    new Question
-    {
-        Id = 45,
-        Topic = "Индексация",
-        Text = "Как получить первый элемент массива?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "arr[0]" },
-            new AnswerOption { Id = 2, Text = "arr[1]" },
-            new AnswerOption { Id = 3, Text = "arr.First()" },
-            new AnswerOption { Id = 4, Text = "arr(0)" }
-        },
-        CorrectAnswerId = 1
-    },
-    new Question
-    {
-        Id = 46,
-        Topic = "Многомерные массивы",
-        Text = "Как объявить двумерный массив 2x3?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "int[,] matrix = new int[2,3];" },
-            new AnswerOption { Id = 3, Text = "int[2] matrix = new int[3];" },
-            new AnswerOption { Id = 4, Text = "int matrix = [2,3];" }
-        },
-        CorrectAnswerId = 1
-    },
-    new Question
-    {
-        Id = 47,
-        Topic = "Массивы",
-        Text = "Как получить количество элементов массива?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "arr.Count()" },
-            new AnswerOption { Id = 2, Text = "arr.Length" },
-            new AnswerOption { Id = 3, Text = "arr.Size" },
-            new AnswerOption { Id = 4, Text = "arr.Count" }
-        },
-        CorrectAnswerId = 2
-    },
-    new Question
-    {
-        Id = 48,
-        Topic = "Индексация",
-        Text = "Что вернет arr[arr.Length]?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "Последний элемент" },
-            new AnswerOption { Id = 2, Text = "Первый элемент" },
-            new AnswerOption { Id = 3, Text = "Ошибку IndexOutOfRange" },
-            new AnswerOption { Id = 4, Text = "0" }
-        },
-        CorrectAnswerId = 3
-    },
-    new Question
-    {
-        Id = 49,
-        Topic = "Многомерные массивы",
-        Text = "Как обратиться к элементу в строке 1, столбце 2 двумерного массива?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "matrix[0][1]" },
-            new AnswerOption { Id = 2, Text = "matrix[1,2]" },
-            new AnswerOption { Id = 3, Text = "matrix[1][2]" },
-            new AnswerOption { Id = 4, Text = "matrix[0,1]" }
-        },
-        CorrectAnswerId = 4,
-        Explanation = "Индексация с 0: строка 0, столбец 1"
-    },
-    new Question
-    {
-        Id = 50,
-        Topic = "Массивы",
-        Text = "Что такое массив?",
-        Options = new List<AnswerOption>
-        {
-            new AnswerOption { Id = 1, Text = "Набор однотипных данных" },
-            new AnswerOption { Id = 2, Text = "Таблица значений" },
-            new AnswerOption { Id = 3, Text = "Коллекция разных типов" },
-            new AnswerOption { Id = 4, Text = "Специальный класс" }
-        },
-        CorrectAnswerId = 1
     },
     new Question
     {
@@ -811,90 +486,325 @@ else
         {
             new AnswerOption { Id = 1, Text = @"Решение с автором" }
         },
-        CorrectAnswerId = 1
+        CorrectAnswers = new List<int> { 1}
     }
-};
-        }
-        public List<UnitTest> GenerateArthurTests()
-        {
-            return new List<UnitTest>
-            {
-                new UnitTest
-                {
-                    Name = "Sample Input 1",
-                    Inputs = new List<string> { "10","10","100" }, // Используем список
-                    ExpectedOutput = "40"
-                },
-                new UnitTest
-                {
-                    Name = "Sample Input 2",
-                    Inputs = new List<string> { "10","10","5" }, // Используем список
-                    ExpectedOutput = "25"
-                },
-                new UnitTest
-                {
-                    Name = "Sample Input 3",
-                    Inputs = new List<string> { "5","100","1" }, // Используем список
-                    ExpectedOutput = "12"
-                },
-                new UnitTest
-                {
-                    Name = "Sample Input 4",
-                    Inputs = new List<string> { "100", "5", "1" },
-                    ExpectedOutput = "12"
-                }
-                
+
             };
         }
-
-        public TestResult EvaluateTest(List<UserAnswer> userAnswers, List<Question> questions)
+    }
+     
+    public class StringsAndSymbolsQuestionGenerator : IQuestionGenerator
+    {
+        public IEnumerable<Question> GenerateQuestions()
         {
-            int correctCount = 0;
-            var incorrectAnswers = new List<QuestionResult>();
-            
-            // Создаем словарь для быстрого поиска вопросов по ID
-            var questionDict = questions.ToDictionary(q => q.Id);
-            
-            foreach (var userAnswer in userAnswers)
+            return new List<Question>
             {
-                if (questionDict.TryGetValue(userAnswer.QuestionId, out var question))
-                {
-                    if (userAnswer.SelectedAnswerId == question.CorrectAnswerId)
-                    {
-                        correctCount++;
-                    }
-                    else
-                    {
-                        incorrectAnswers.Add(new QuestionResult
-                        {
-                            Question = question,
-                            SelectedAnswerId = userAnswer.SelectedAnswerId
-                        });
-                    }
-                }
-            }
-            
-            return new TestResult
-            {
-                TotalQuestions = questions.Count, // Общее количество вопросов
-                CorrectAnswers = correctCount,    // Количество правильных ответов
-                IncorrectAnswers = incorrectAnswers
+                 // Раздел 5: Строки и символы (5 вопросов)
+    new Question
+    {
+        Id = 31,
+        Topic = "Символы",
+        Text = "Какой тип используется для одиночного символа?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "string" },
+            new AnswerOption { Id = 2, Text = "char" },
+            new AnswerOption { Id = 3, Text = "symbol" },
+            new AnswerOption { Id = 4, Text = "letter" }
+        },
+        CorrectAnswers = new List<int> { 2}
+    },
+    new Question
+    {
+        Id = 32,
+        Topic = "Строки",
+        Text = "Как получить длину строки?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "str.Length" },
+            new AnswerOption { Id = 2, Text = "str.Count" },
+            new AnswerOption { Id = 3, Text = "str.Size" },
+            new AnswerOption { Id = 4, Text = "len(str)" }
+        },
+        CorrectAnswers = new List<int> { 1}
+    },
+    new Question
+    {
+        Id = 33,
+        Topic = "Строки",
+        Text = "Как объединить две строки?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "str1 + str2" },
+            new AnswerOption { Id = 2, Text = "str1.Concat(str2)" },
+            new AnswerOption { Id = 3, Text = "String.Join(\"\", str1, str2)" },
+            new AnswerOption { Id = 4, Text = "Любой вариант" }
+        },
+        CorrectAnswers = new List<int> { 4}
+    },
+    new Question
+    {
+        Id = 34,
+        Topic = "Символы",
+        Text = "Как преобразовать символ в верхний регистр?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "char.ToUpper(ch)" },
+            new AnswerOption { Id = 2, Text = "ch.ToUpper()" },
+            new AnswerOption { Id = 3, Text = "Char.UpperCase(ch)" },
+            new AnswerOption { Id = 4, Text = "ch.Upper()" }
+        },
+        CorrectAnswers = new List<int> { 1}
+    },
+    new Question
+    {
+        Id = 35,
+        Topic = "Строки",
+        Text = "Что вернет Hello.Substring(1, 3)?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "Hel" },
+            new AnswerOption { Id = 2, Text = "ell" },
+            new AnswerOption { Id = 3, Text = "llo" },
+            new AnswerOption { Id = 4, Text = "lo" }
+        },
+        CorrectAnswers = new List<int> { 2},
+        Explanation = "Начиная с индекса 1, взять 3 символа: e,l,l"
+    },
             };
         }
-
-        public async Task<List<UnitTest>> GetTests()
+    }
+    
+    public class FunctionsQuestionGenerator : IQuestionGenerator
+    {
+        public IEnumerable<Question> GenerateQuestions()
         {
-            return await Task.FromResult(new List<UnitTest>
+            return new List<Question>
             {
-                // Тесты для калькулятора
-                new UnitTest
-                {
-                    Name = "Addition of positive numbers",
-                    MethodName = "Add",
-                    Parameters = new object[] { 5, 3 },
-                    ExpectedResult = 8
-                }
-            });
+                 // Раздел 6: Функции (8 вопросов)
+    new Question
+    {
+        Id = 36,
+        Topic = "Функции",
+        Text = "Как объявить функцию без возвращаемого значения?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "void Func()" },
+            new AnswerOption { Id = 2, Text = "function Func()" },
+            new AnswerOption { Id = 3, Text = "def Func()" },
+            new AnswerOption { Id = 4, Text = "null Func()" }
+        },
+        CorrectAnswers = new List<int> { 1}
+    },
+    new Question
+    {
+        Id = 37,
+        Topic = "Параметры функций",
+        Text = "Как передать параметр по ссылке?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "void Func(int param)" },
+            new AnswerOption { Id = 2, Text = "void Func(ref int param)" },
+            new AnswerOption { Id = 3, Text = "void Func(out int param)" },
+            new AnswerOption { Id = 4, Text = "Варианты 2 и 3" }
+        },
+        CorrectAnswers = new List<int> { 4}
+    },
+    new Question
+    {
+        Id = 38,
+        Topic = "Возврат значений",
+        Text = "Как вернуть значение из функции?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "return value;" },
+            new AnswerOption { Id = 2, Text = "break value;" },
+            new AnswerOption { Id = 3, Text = "exit(value);" },
+            new AnswerOption { Id = 4, Text = "result = value;" }
+        },
+        CorrectAnswers = new List<int> { 1}
+    },
+    new Question
+    {
+        Id = 39,
+        Topic = "Виды функций",
+        Text = "Можно ли вызвать функцию до её объявления?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "Да, всегда" },
+            new AnswerOption { Id = 2, Text = "Только в том же классе" },
+            new AnswerOption { Id = 3, Text = "Нет" },
+            new AnswerOption { Id = 4, Text = "Только если функция статическая" }
+        },
+        CorrectAnswers = new List<int> { 3}
+    },
+    new Question
+    {
+        Id = 40,
+        Topic = "Оператор return",
+        Text = "Что происходит после выполнения return?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "Функция продолжает выполнение" },
+            new AnswerOption { Id = 2, Text = "Управление возвращается в вызывающий код" },
+            new AnswerOption { Id = 3, Text = "Программа завершается" },
+            new AnswerOption { Id = 4, Text = "Выполняется следующий оператор" }
+        },
+        CorrectAnswers = new List<int> { 2}
+    },
+    new Question
+    {
+        Id = 41,
+        Topic = "Параметры функций",
+        Text = "Сколько параметров может принимать функция?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "Не более 5" },
+            new AnswerOption { Id = 2, Text = "Не более 10" },
+            new AnswerOption { Id = 3, Text = "Любое количество" },
+            new AnswerOption { Id = 4, Text = "Зависит от типа" }
+        },
+        CorrectAnswers = new List<int> { 3}
+    },
+    new Question
+    {
+        Id = 42,
+        Topic = "Виды функций",
+        Text = "Какой тип функции не возвращает значение?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "int" },
+            new AnswerOption { Id = 2, Text = "string" },
+            new AnswerOption { Id = 3, Text = "void" },
+            new AnswerOption { Id = 4, Text = "bool" }
+        },
+        CorrectAnswers = new List<int> { 3}
+    },
+    new Question
+    {
+        Id = 43,
+        Topic = "Функции",
+        Text = "Что такое параметр функции?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "Локальная переменная" },
+            new AnswerOption { Id = 2, Text = "Глобальная переменная" },
+            new AnswerOption { Id = 3, Text = "Значение, передаваемое в функцию" },
+            new AnswerOption { Id = 4, Text = "Результат работы функции" }
+        },
+        CorrectAnswers = new List<int> { 3}
+    },
+
+            };
+        }
+    }
+    
+    public class ArraysQuestionGenerator : IQuestionGenerator
+    {
+        public IEnumerable<Question> GenerateQuestions()
+        {
+            return new List<Question>
+            {
+                 // Раздел 7: Массивы (7 вопросов)
+    new Question
+    {
+        Id = 44,
+        Topic = "Массивы",
+        Text = "Как создать и сразу инициализировать массив из 3 целых чисел?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "int[] arr = {1,2,3};" },
+            new AnswerOption { Id = 2, Text = "int arr = [1,2,3];" },
+            new AnswerOption { Id = 3, Text = "array arr = new array(3);" },
+            new AnswerOption { Id = 4, Text = "int[] arr = new int[3];" }
+        },
+        CorrectAnswers = new List<int> { 1}
+    },
+    new Question
+    {
+        Id = 45,
+        Topic = "Индексация",
+        Text = "Как получить первый элемент массива?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "arr[0]" },
+            new AnswerOption { Id = 2, Text = "arr[1]" },
+            new AnswerOption { Id = 3, Text = "arr.First()" },
+            new AnswerOption { Id = 4, Text = "arr(0)" }
+        },
+        CorrectAnswers = new List<int> { 1}
+    },
+    new Question
+    {
+        Id = 46,
+        Topic = "Многомерные массивы",
+        Text = "Как объявить двумерный массив 2x3?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "int[,] matrix = new int[2,3];" },
+            new AnswerOption { Id = 3, Text = "int[2] matrix = new int[3];" },
+            new AnswerOption { Id = 4, Text = "int matrix = [2,3];" }
+        },
+        CorrectAnswers = new List<int> { 1}
+    },
+    new Question
+    {
+        Id = 47,
+        Topic = "Массивы",
+        Text = "Как получить количество элементов массива?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "arr.Count()" },
+            new AnswerOption { Id = 2, Text = "arr.Length" },
+            new AnswerOption { Id = 3, Text = "arr.Size" },
+            new AnswerOption { Id = 4, Text = "arr.Count" }
+        },
+        CorrectAnswers = new List<int> { 2}
+    },
+    new Question
+    {
+        Id = 48,
+        Topic = "Индексация",
+        Text = "Что вернет arr[arr.Length]?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "Последний элемент" },
+            new AnswerOption { Id = 2, Text = "Первый элемент" },
+            new AnswerOption { Id = 3, Text = "Ошибку IndexOutOfRange" },
+            new AnswerOption { Id = 4, Text = "0" }
+        },
+        CorrectAnswers = new List<int> { 3}
+    },
+    new Question
+    {
+        Id = 49,
+        Topic = "Многомерные массивы",
+        Text = "Как обратиться к элементу в строке 1, столбце 2 двумерного массива?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "matrix[0][1]" },
+            new AnswerOption { Id = 2, Text = "matrix[1,2]" },
+            new AnswerOption { Id = 3, Text = "matrix[1][2]" },
+            new AnswerOption { Id = 4, Text = "matrix[0,1]" }
+        },
+        CorrectAnswers = new List<int> { 4},
+        Explanation = "Индексация с 0: строка 0, столбец 1"
+    },
+    new Question
+    {
+        Id = 50,
+        Topic = "Массивы",
+        Text = "Что такое массив?",
+        Options = new List<AnswerOption>
+        {
+            new AnswerOption { Id = 1, Text = "Набор однотипных данных" },
+            new AnswerOption { Id = 2, Text = "Таблица значений" },
+            new AnswerOption { Id = 3, Text = "Коллекция разных типов" },
+            new AnswerOption { Id = 4, Text = "Специальный класс" }
+        },
+        CorrectAnswers = new List<int> { 1}
+    },
+            };
         }
     }
 }

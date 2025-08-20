@@ -6,8 +6,10 @@ public class Question
     public string Topic { get; set; }
     public string Text { get; set; }
     public List<AnswerOption> Options { get; set; }
-    public int CorrectAnswerId { get; set; }
+    public List<int> CorrectAnswers { get; set; } // Изменено для поддержки нескольких правильных ответов
     public string Explanation { get; set; }
+    public int Complexity { get; set; } // Добавлено поле сложности
+    public string QuestionType { get; set; } // Добавлено поле типа вопроса
 }
 
 public class AnswerOption
@@ -19,7 +21,7 @@ public class AnswerOption
 public class UserAnswer
 {
     public int QuestionId { get; set; }
-    public int SelectedAnswerId { get; set; }
+    public List<int> SelectedOptionIds { get; set; } // Изменено для поддержки нескольких выборов
 }
 
 public class TestResult
@@ -32,5 +34,5 @@ public class TestResult
 public class QuestionResult
 {
     public Question Question { get; set; }
-    public int SelectedAnswerId { get; set; }
+    public List<int> SelectedAnswerIds { get; set; }
 }

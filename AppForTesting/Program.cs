@@ -1,5 +1,5 @@
-using CSharpTestApp.Infrastructure;
 using CSharpTestApp.Services;
+using CSharpTestApp.Services.Generators;
 
 var builder = WebApplication.CreateBuilder(args);
 // Добавление сервисов
@@ -11,11 +11,32 @@ builder.Services.AddCors(options => {
             .AllowAnyHeader();
     });
 });
-builder.Services.AddScoped<TestService>();
-builder.Services.AddScoped<ICodeTester, CodeTester>();
-builder.Services.AddScoped<CompilationResult>();
-builder.Services.AddScoped<TestRunResult>();
-builder.Services.AddScoped<ITestRepository, InMemoryTestRepository>();
+builder.Services.AddTransient<IQuestionService,QuestionService>();
+builder.Services.AddTransient<ICodeTester, CodeTester>();
+builder.Services.AddTransient<ICodeExecutionService, CodeExecutionService>();
+builder.Services.AddTransient<InputOutputQuestionGenerator>();
+builder.Services.AddTransient<VariableDeclarationQuestionGenerator>();
+builder.Services.AddTransient<ConditionQuestionGenerator>();
+builder.Services.AddTransient<LoopQuestionGenerator>();
+builder.Services.AddTransient<StringsAndSymbolsQuestionGenerator>();
+builder.Services.AddTransient<FunctionsQuestionGenerator>();
+builder.Services.AddTransient<ArraysQuestionGenerator>();
+
+builder.Services.AddTransient<IQuestionGenerator>(serviceProvider =>
+{
+    var generators = new List<IQuestionGenerator>
+    {
+        serviceProvider.GetRequiredService<InputOutputQuestionGenerator>(),
+        serviceProvider.GetRequiredService<VariableDeclarationQuestionGenerator>(),
+        serviceProvider.GetRequiredService<ConditionQuestionGenerator>(),
+        serviceProvider.GetRequiredService<LoopQuestionGenerator>(),
+        serviceProvider.GetRequiredService<StringsAndSymbolsQuestionGenerator>(),
+        serviceProvider.GetRequiredService<FunctionsQuestionGenerator>(),
+        serviceProvider.GetRequiredService<ArraysQuestionGenerator>()
+    };
+    return new CompositeQuestionGenerator(() => generators);
+});
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddSpaStaticFiles(configuration => 
 {

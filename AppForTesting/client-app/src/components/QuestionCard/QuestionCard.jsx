@@ -29,7 +29,7 @@ const QuestionCard = ({ question, onSelect, selectedAnswer }) => {
               key={`option_${question.id}_${option.id}`}
               option={option}
               questionId={question.id}
-              selectedAnswer={selectedAnswer}
+              selectedAnswer={selectedAnswer || []}
               onSelect={onSelect}
             />
           ))

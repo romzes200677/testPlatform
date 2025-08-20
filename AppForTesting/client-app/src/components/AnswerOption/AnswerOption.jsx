@@ -16,7 +16,7 @@ const AnswerOption = ({
         type="radio"
         id={`q_${questionId}_o_${option.id}`}
         name={`question_${questionId}`}
-        checked={Number(selectedAnswer) === Number(option.id)}
+        checked={selectedAnswer.includes(Number(option.id))}
         onChange={() => {}}
       />
       <label htmlFor={`q_${questionId}_o_${option.id}`}>

@@ -147,7 +147,7 @@ public class Program
     setResults(null);
     
     try {
-      const response =  await axios.post(`${API_BASE_URL}/api/test/execute`, {
+      const response =  await axios.post(`${API_BASE_URL}/execute`, {
         assignmentId: assignment.id,
         mainMethodTemplate: assignment.mainMethodTemplate,
         userCode: userCode,
